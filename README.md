@@ -42,10 +42,10 @@ That will return a JSON response to the client of the following form:
 
 ```json
 {
-  title: "Starlight",
-  artist: "Muse",
-  cover_img: "<url_cover>",
-  preview_link: "<audio_preview_link>"
+  "title": "Starlight",
+  "artist": "Muse",
+  "cover_img": "<url_cover>",
+  "preview_link": "<audio_preview_link>"
 }
 ```
 
@@ -59,8 +59,8 @@ That will return a JSON response to the client of the following form:
 
 ```json
 {
-  artist: "Muse",
-  picture: "<picture_url>"
+  "artist": "Muse",
+  "picture": "<picture_url>"
 }
 ```
 
@@ -74,12 +74,12 @@ That will return a JSON response to the client of the following form:
 
 ```json
 {
-  name: "Muse",
-  country: "GB",
-  year: 1997,
-  genres: ['rock', 'pop'],
-  description: "<description_text>",
-  followers: <number_of_spotify_followers>
+  "name": "Muse",
+  "country": "GB",
+  "year": 1997,
+  "genres": ["rock", "pop"],
+  "description": "<description_text>",
+  "followers": "<number_of_spotify_followers>"
 }
 ```
 
@@ -95,10 +95,10 @@ That will return a JSON list of events of the following form:
 
 ```json
 {
-  name: "<name>",
-  venue_name: "<venue_name>",
-  position: {lat: <lat>, lng, <lng>},
-  id: event_id,
+  "name": "<name>",
+  "venue_name": "<venue_name>",
+  "position": {"lat": "<lat>", "lng": "<lng>"},
+  "id": "<event_id>",
 }
 ```
 
@@ -128,14 +128,14 @@ This will return JSON of the form:
 
 ```json
 {
-  name: "<name>",
-  venue_name: "<venue_name>",
-  position: {lat: <lat>, lng, <lng>},
-  lineup: ["<artist1_name>","<artist2_name>","..."],
-  id: event_id,
-  date: "<date>",
-  description: "<description>",
-  ticketshop: "<ticketshop_link>"
+  "name": "<name>",
+  "venue_name": "<venue_name>",
+  "position": {"lat": "<lat>", "lng": "<lng>"},
+  "lineup": ["<artist1_name>","<artist2_name>","..."],
+  "id": "<event_id>",
+  "date": "<date>",
+  "description": "<description>",
+  "ticketshop": "<ticketshop_link>"
 }
 ```
 

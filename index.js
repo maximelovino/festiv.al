@@ -1,9 +1,10 @@
+require('dotenv').config({path: "keys.env"});
 const express = require('express');
 const b64 = require('base-64');
 let request = require('request');
 const app = express();
-const spotifyID = '49db2e64f73b47a79bef41d3356efdfc';
-const spotifySecret = 'e778b3990a434c089ac64a5eae8d17e5';
+const spotifyID = process.env.SPOTIFY_ID;
+const spotifySecret = process.env.SPOTIFY_SECRET;
 let token = '';
 
 

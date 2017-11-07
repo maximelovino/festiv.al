@@ -1,6 +1,6 @@
 # Festiv.al - A search engine for music festivals and concerts
 
-Festiv.al is a search engine for music festivals and concerts build around several publicly available such as Spotify, MusicBrainz and Eventful.
+Festiv.al is a search engine for music festivals and concerts build around several publicly available APIs such as Spotify, MusicBrainz and Eventful.
 
 ## Features
 
@@ -35,7 +35,7 @@ The features of our website will be the following:
 #### Endpoint to get a random song for an artist
 
 ```
-GET /artist/song/<artist_name>
+GET /artist/<artist_name>/song
 ```
 
 That will return a JSON response to the client of the following form:
@@ -52,7 +52,7 @@ That will return a JSON response to the client of the following form:
 #### Endpoint to get picture of an artist
 
 ```
-GET /artist/picture/<artist_name>
+GET /artist/<artist_name>/picture
 ```
 
 That will return a JSON response to the client of the following form:
@@ -67,7 +67,7 @@ That will return a JSON response to the client of the following form:
 #### Endpoint to get informations about an artist
 
 ```
-GET /artist/infos/<artist_name>
+GET /artist/<artist_name>/infos
 ```
 
 That will return a JSON response to the client of the following form:
@@ -113,7 +113,7 @@ Response similar to events around location
 #### Endpoint to get a random song for an event
 
 ```
-GET /events/song/<event_id>
+GET /events/<event_id>/song
 ```
 
 This will return a response like the one for the artist song.
@@ -121,7 +121,7 @@ This will return a response like the one for the artist song.
 #### Endpoint to get detail for an event
 
 ```
-GET /events/detail/<event_id>
+GET /events/<event_id>/detail
 ```
 
 This will return JSON of the form:
@@ -139,7 +139,7 @@ This will return JSON of the form:
 }
 ```
 
-## Technologies choosen
+## Technologies chosen
 
 We're gonna run Node.js coupled with Express for our server. We're gonna use the Pug templating language to build the webpages for our clients from the Node.js server. So the Node.js server is gonna be our web server for our clients as well as our REST server. The REST client part is gonna be incorporated in the client-side javascript code. We're using modern JavaScript features such as Requests and Promises for our queries.
 

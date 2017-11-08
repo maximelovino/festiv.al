@@ -49,10 +49,11 @@ That will return a JSON response to the client of the following form:
 }
 ```
 
-For that we will use the search endpoint from the Spotify API with a type of `track`, an example query would be:
+For that we will use the search endpoint from the Spotify API with a type of `artist` and then from the ID of the artist, we can get the top tracks, an example query would be:
 
 ```
-GET https://api.spotify.com/v1/search?query=Muse&type=track
+GET https://api.spotify.com/v1/search?query=Muse&type=artist
+GET https://api.spotify.com/v1/artists/{id}/top-tracks
 ```
 
 #### Endpoint to get picture of an artist
@@ -95,7 +96,7 @@ That will return a JSON response to the client of the following form:
 }
 ```
 
-For that we will use a combination of the Spotify API endpoint with a search for `artist` and the musicbrainz API with a query for an artist.
+For that we will use a combination of the Spotify API endpoint with a search for `artist` and the musicbrainz API with a query for an artist, as well as BandsInTown.
 
 ```
 GET https://api.spotify.com/v1/search?query=Muse&type=artist
@@ -105,7 +106,11 @@ GET https://api.spotify.com/v1/search?query=Muse&type=artist
 GET http://musicbrainz.org/ws/2/artist/?query=Muse
 ```
 
-For merging these two endpoints, we're gonna use the Spotify data as the reference.
+```
+GET https://rest.bandsintown.com/artists/Muse?app_id=<app_id>
+```
+
+For merging these three endpoints, we're gonna use the Spotify data as the reference.
 
 ### Events
 
@@ -131,6 +136,21 @@ For this we will use Eventful with a search around a given location:
 ```
 http://api.eventful.com/rest/events/search?app_key=<key>&where=<lat>,<lng>&within=<radius>&date=Future&category=[music,festivals_parades]
 ```
+
+Then the idea is to get a list of the top current artists using the spotify API by getting a `toplists` playlist:
+
+```
+GET https://api.spotify.com/v1/browse/categories/toplists/playlists
+GET https://api.spotify.com/v1/users/spotify/playlists/<playlistID>
+```
+
+Then we can search on BandsInTown for events for these artists and filter only the ones in the displayed area:
+
+```
+GET https://rest.bandsintown.com/artists/Muse/events?app_id=<app_id>
+```
+
+And then we aggregate the informations for all events services by matching the similar events by date, name and location, and we store them in our database.
 
 #### Endpoint to get all events for a given artist
 
@@ -185,4 +205,4 @@ We decided to go with Node.js because of the wide support and community around i
 
 ### Aggregation of the different events informations providers
 
-We're gonna group the information coming from the events providers API by putting them in a database and generating an `event_id` in our database that we're gonna send to the client to identify uniquely an event. For the database, we're gonna use MySQL.
+We're gonna group the informations coming from the events providers API by putting them in a database and generating an `event_id` in our database that we're gonna send to the client to identify uniquely an event. For the database, we're gonna use MySQL.

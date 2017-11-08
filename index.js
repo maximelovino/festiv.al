@@ -5,15 +5,16 @@ let request = require('request');
 const app = express();
 const spotifyID = process.env.SPOTIFY_ID;
 const spotifySecret = process.env.SPOTIFY_SECRET;
+app.set('view engine', 'pug');
 let token = '';
+
+app.use('/material', express.static(__dirname + '/node_modules/material-components-web/dist/'));
+app.use('/scripts', express.static(__dirname + '/scripts/'));
+app.use('/css', express.static(__dirname + '/css/'));
 
 
 app.get('/', (req, res) => {
-    res.send("Welcome to Festiv.al");
-});
-
-app.get('/user/:name', (req, res) => {
-    res.send(`Hello ${req.params.name}`);
+    res.render('home');
 });
 
 //Route to generate a token, call this one first
@@ -65,6 +66,8 @@ app.get('/artist/:name/picture/', (req, res) => {
 });
 
 //Route to play a song from the artist with the album art
+//TODO not always the same song, choose at random from not null
+//artist id => top tracks
 app.get('/artist/:name/audio', (req, res) => {
     const artistName = req.params.name;
     const options = {

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    - const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
+    .mdc-textfield.mdc-textfield--fullwidth.mdc-textfield--upgraded
+        input(type="text" placeholder="Search").mdc-textfield__input
+        .mdc-textfield__bottom-line
+    br
+    div#map
+    script(src='/scripts/materialCalls.js')
+    script(src='/scripts/map.js')
+    script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initMap`)
+
+

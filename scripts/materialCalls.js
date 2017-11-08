@@ -1,0 +1,1 @@
+mdc.textfield.MDCTextfield.attachTo(document.querySelector('.mdc-textfield'));

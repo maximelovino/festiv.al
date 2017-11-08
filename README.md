@@ -49,6 +49,12 @@ That will return a JSON response to the client of the following form:
 }
 ```
 
+For that we will use the search endpoint from the Spotify API with a type of `track`, an example query would be:
+
+```
+GET https://api.spotify.com/v1/search?query=Muse&type=track
+```
+
 #### Endpoint to get picture of an artist
 
 ```
@@ -62,6 +68,12 @@ That will return a JSON response to the client of the following form:
   "artist": "Muse",
   "picture": "<picture_url>"
 }
+```
+
+For that we will use the search endpoint from the Spotify API with a type of `artist`, an example of query would be:
+
+```
+GET https://api.spotify.com/v1/search?query=Muse&type=artist
 ```
 
 #### Endpoint to get informations about an artist
@@ -83,12 +95,24 @@ That will return a JSON response to the client of the following form:
 }
 ```
 
+For that we will use a combination of the Spotify API endpoint with a search for `artist` and the musicbrainz API with a query for an artist.
+
+```
+GET https://api.spotify.com/v1/search?query=Muse&type=artist
+```
+
+```
+GET http://musicbrainz.org/ws/2/artist/?query=Muse
+```
+
+For merging these two endpoints, we're gonna use the Spotify data as the reference.
+
 ### Events
 
 #### Endpoint to get a list of events around a given location
 
 ```
-GET /events/location/<lat>/<lng>
+GET /events/location/<lat>/<lng>/<radius>
 ```
 
 That will return a JSON list of events of the following form:
@@ -102,6 +126,12 @@ That will return a JSON list of events of the following form:
 }
 ```
 
+For this we will use Eventful with a search around a given location:
+
+```
+http://api.eventful.com/rest/events/search?app_key=<key>&where=<lat>,<lng>&within=<radius>&date=Future&category=[music,festivals_parades]
+```
+
 #### Endpoint to get all events for a given artist
 
 ```
@@ -110,6 +140,12 @@ GET /events/artist/<artist_name>
 
 Response similar to events around location
 
+We're gonna get the events for an artist from the BandsInTown API
+
+```
+GET https://rest.bandsintown.com/artists/Muse/events?app_id=<app_id>
+```
+
 #### Endpoint to get a random song for an event
 
 ```
@@ -117,6 +153,8 @@ GET /events/<event_id>/song
 ```
 
 This will return a response like the one for the artist song.
+
+Our backend is gonna look at the lineup and pick an artist and use the Spotify route to get a song.
 
 #### Endpoint to get detail for an event
 
@@ -144,3 +182,7 @@ This will return JSON of the form:
 We're gonna run Node.js coupled with Express for our server. We're gonna use the Pug templating language to build the webpages for our clients from the Node.js server. So the Node.js server is gonna be our web server for our clients as well as our REST server. The REST client part is gonna be incorporated in the client-side javascript code. We're using modern JavaScript features such as Requests and Promises for our queries.
 
 We decided to go with Node.js because of the wide support and community around it as well as the number of modules available on NPM.
+
+### Aggregation of the different events informations providers
+
+We're gonna group the information coming from the events providers API by putting them in a database and generating an `event_id` in our database that we're gonna send to the client to identify uniquely an event. For the database, we're gonna use MySQL.

@@ -40,7 +40,7 @@ app.get('/token', (req, res) => {
 });
 
 //Route to display the picture of an artist
-app.get('/artist/picture/:name', (req, res) => {
+app.get('/artist/:name/picture/', (req, res) => {
     const artistName = req.params.name;
     const options = {
         url: `https://api.spotify.com/v1/search?query=${artistName}&type=artist`,
@@ -65,7 +65,7 @@ app.get('/artist/picture/:name', (req, res) => {
 });
 
 //Route to play a song from the artist with the album art
-app.get('/artist/audio/:name', (req, res) => {
+app.get('/artist/:name/audio', (req, res) => {
     const artistName = req.params.name;
     const options = {
         url: `https://api.spotify.com/v1/search?query=${artistName}&type=track`,

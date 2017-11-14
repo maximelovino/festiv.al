@@ -43,7 +43,7 @@ That will return a JSON response to the client of the following form:
 ```json
 {
   "title": "Starlight",
-  "artist": "Muse",
+  "artists": ["Muse","...<featuringArtists>"],
   "cover_img": "<url_cover>",
   "preview_link": "<audio_preview_link>"
 }

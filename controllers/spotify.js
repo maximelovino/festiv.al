@@ -32,7 +32,7 @@ function generateToken(callback){
 
 function getArtist(artistName, callback){
     if (token == ""){
-        generateToken(() => getPictureForAnArtist(artistName,callback))
+        generateToken(() => getArtist(artistName,callback))
     }else{
         const options = {
             url: `https://api.spotify.com/v1/search?query=${artistName}&type=artist`,
@@ -51,11 +51,16 @@ function getArtist(artistName, callback){
                     "name": artist.name,
                     "picture": artist.images[0].url,
                     "id": artist.id,
+                    "followers": artist.followers.total,
+                    "genres": artist.genres,
                 }
+                console.log("=========");
+                console.log(toSend);
+                console.log("=========");
                 callback(toSend);
             }else{
                 console.log("PROBLEM in getting artist info");
-                generateToken(() => getPictureForAnArtist(artistName,callback))
+                generateToken(() => getArtist(artistName,callback))
             }
         })
     }
@@ -111,3 +116,4 @@ function getSongForArtist(artistName, callback){
 
 exports.getPictureForAnArtist = getPictureForAnArtist;
 exports.getSongForArtist = getSongForArtist;
+exports.getArtist = getArtist;

@@ -92,11 +92,12 @@ That will return a JSON response to the client of the following form:
   "year": 1997,
   "genres": ["rock", "pop"],
   "description": "<description_text>",
-  "followers": "<number_of_spotify_followers>"
+  "followers": "<number_of_spotify_followers>",
+  "facebook": "<facebook page link>",
 }
 ```
 
-For that we will use a combination of the Spotify API endpoint with a search for `artist` and the musicbrainz API with a query for an artist, as well as BandsInTown.
+For that we will use a combination of the Spotify API endpoint with a search for `artist` and the musicbrainz API with a query for an artist, as well as BandsInTown. BandsInTown will actually provide use with an MBID, which is a unique identifier used to request artist information on MusicBrainz.
 
 ```
 GET https://api.spotify.com/v1/search?query=Muse&type=artist

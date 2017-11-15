@@ -1,8 +1,10 @@
 require('dotenv').config({path: "keys.env"});
 const express = require('express');
 const app = express();
-const spotify = require('./controllers/spotify');
+//const spotify = require('./controllers/spotify');
 const bandsInTown = require('./controllers/bandsintown');
+const musicbrainz = require('./controllers/musicbrainz')
+const artists = require('./controllers/artists');
 app.set('view engine', 'pug');
 
 app.use('/material', express.static(__dirname + '/node_modules/material-components-web/dist/'));
@@ -14,6 +16,27 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+app.get('/artist/:name', (req,res) => {
+    artists.getSingleArtistInfos(req.params.name,(data) => {
+        res.contentType('json');
+        res.send(data);
+    })
+})
+
+
+app.get('/brainz/:name', (req,res) => {
+    bandsInTown.getSingleArtist(req.params.name, (bit) => {
+        musicbrainz.getSingleArtist(bit.mbid, (brainz) => {
+            const data = {
+                'bit': bit,
+                'brainz': brainz,
+            }
+            res.contentType('application/json');
+            res.send(data);
+        })
+    })
+});
+/*
 //temporary route to test what's given by API
 app.get('/bit/:name', (req,res) => {
     bandsInTown.getSingleArtist(req.params.name, (data) => {
@@ -46,7 +69,7 @@ app.get('/artist/:name/audio', (req, res) => {
         res.send(data);
     });
 });
-
+*/
 app.listen(3000, () => {
     console.log("Listening on http://localhost:3000/");
 });

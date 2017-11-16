@@ -9,12 +9,12 @@ exports.getSingleArtist = (artistName, callback) => {
 			'Accept': "application/json",
 		}
 	}
-	
+
 	request(options, (error, response, body) => {
-		if (!error && response.statusCode == 200){
+		if (!error && response.statusCode == 200) {
 			const data = JSON.parse(body);
 			callback(data);
-		}else{
+		} else {
 			console.log("Problem getting artist from bandsInTown");
 			console.log(error);
 			console.log(response);
@@ -30,12 +30,12 @@ exports.getEventsForArtist = (artistName, callback) => {
 			'Accept': "application/json",
 		}
 	}
-	
+
 	request(options, (error, response, body) => {
-		if (!error && response.statusCode == 200){
+		if (!error && response.statusCode == 200) {
 			const data = JSON.parse(body);
 			callback(data);
-		}else{
+		} else {
 			console.log("Problem getting events for artist from bandsInTown");
 			console.log(error);
 			console.log(response);

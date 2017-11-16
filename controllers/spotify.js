@@ -1,11 +1,11 @@
-require('dotenv').config({path: "keys.env"});
+require('dotenv').config({ path: "keys.env" });
 const b64 = require('base-64');
 let request = require('request');
 const spotifyID = process.env.SPOTIFY_ID;
 const spotifySecret = process.env.SPOTIFY_SECRET;
 let token = "";
 
-function generateToken(callback){
+function generateToken(callback) {
     console.log("Entered the token function");
     const keyToSend = `${spotifyID}:${spotifySecret}`;
     const b64Key = b64.encode(keyToSend);
@@ -20,7 +20,7 @@ function generateToken(callback){
         },
     };
     request(options, (error, response, body) => {
-        if (!error && response.statusCode == 200){
+        if (!error && response.statusCode == 200) {
             const data = JSON.parse(body);
             token = data.access_token;
             console.log(`TOKEN ${token}`);
@@ -30,10 +30,10 @@ function generateToken(callback){
 }
 
 
-function getArtist(artistName, callback){
-    if (token == ""){
-        generateToken(() => getArtist(artistName,callback))
-    }else{
+function getArtist(artistName, callback) {
+    if (token == "") {
+        generateToken(() => getArtist(artistName, callback))
+    } else {
         const options = {
             url: `https://api.spotify.com/v1/search?query=${artistName}&type=artist`,
             method: "GET",
@@ -42,45 +42,34 @@ function getArtist(artistName, callback){
                 'Authorization': `Bearer ${token}`,
             }
         };
-        
-        request(options, (error,response, body) => {
-            if (!error && response.statusCode == 200){
+
+        request(options, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
                 const data = JSON.parse(body);
                 const artist = data.artists.items[0];
-                const toSend = {
-                    "name": artist.name,
-                    "picture": artist.images[0].url,
-                    "id": artist.id,
-                    "followers": artist.followers.total,
-                    "genres": artist.genres,
-                }
-                console.log("=========");
-                console.log(toSend);
-                console.log("=========");
-                callback(toSend);
-            }else{
+                callback(artist);
+            } else {
                 console.log("PROBLEM in getting artist info");
-                generateToken(() => getArtist(artistName,callback))
+                generateToken(() => getArtist(artistName, callback))
             }
         })
     }
 }
 
-function getPictureForAnArtist(artistName, callback){
-    getArtist(artistName,(artist) => {
-        console.log(artist.id);
+function getPictureForAnArtist(artistName, callback) {
+    getArtist(artistName, (artist) => {
         const toSend = {
             "name": artist.name,
-            "picture": artist.picture,
+            "picture": artist.images[0].url,
         }
         callback(toSend);
     });
 }
 
-function getSongForArtist(artistName, callback){
+function getSongForArtist(artistName, callback) {
     getArtist(artistName, (artist) => {
         const id = artist.id;
-        
+
         const options = {
             url: `https://api.spotify.com/v1/artists/${id}/top-tracks?country=CH`,
             method: "GET",
@@ -89,9 +78,9 @@ function getSongForArtist(artistName, callback){
                 'Authorization': `Bearer ${token}`,
             }
         }
-        
+
         request(options, (error, response, body) => {
-            if (!error && response.statusCode == 200){
+            if (!error && response.statusCode == 200) {
                 const data = JSON.parse(body);
                 const tracks = data.tracks;
                 const tracksWithPreview = tracks.filter((t) => t.preview_url != null);
@@ -105,12 +94,12 @@ function getSongForArtist(artistName, callback){
                 });
                 const toSend = choices[Math.floor(Math.random() * choices.length)]
                 callback(toSend);
-            }else{
+            } else {
                 console.log("PROBLEM in getting top tracks");
-                generateToken(() => getSongForArtist(artistName,callback))
+                generateToken(() => getSongForArtist(artistName, callback))
             }
         })
-        
+
     })
 }
 

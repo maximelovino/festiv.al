@@ -4,6 +4,8 @@ let request = require('request');
 const spotifyID = process.env.SPOTIFY_ID;
 const spotifySecret = process.env.SPOTIFY_SECRET;
 let token = "";
+const countries = ["US", "GB", "CH","FR","ES"];
+let index = 0;
 
 function generateToken(callback) {
     console.log("Entered the token function");
@@ -66,12 +68,13 @@ function getPictureForAnArtist(artistName, callback) {
     });
 }
 
-function getSongForArtist(artistName, callback) {
+function getSongForArtist(artistName, callback, country="US") {
     getArtist(artistName, (artist) => {
         const id = artist.id;
+        console.log(id, country);
 
         const options = {
-            url: `https://api.spotify.com/v1/artists/${id}/top-tracks?country=CH`,
+            url: `https://api.spotify.com/v1/artists/${id}/top-tracks?country=${country}`,
             method: "GET",
             headers: {
                 'Accept': "application/json",
@@ -92,8 +95,14 @@ function getSongForArtist(artistName, callback) {
                         'preview_link': t.preview_url,
                     };
                 });
-                const toSend = choices[Math.floor(Math.random() * choices.length)]
-                callback(toSend);
+                if(choices.length == 0 && index < countries.length -1){
+                    getSongForArtist(artistName, callback, countries[index]);
+                    index++;
+                }else{
+                    index = 0;
+                    const toSend = choices[Math.floor(Math.random() * choices.length)]
+                    callback(toSend);
+                }
             } else {
                 console.log("PROBLEM in getting top tracks");
                 generateToken(() => getSongForArtist(artistName, callback))

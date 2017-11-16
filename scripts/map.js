@@ -1,4 +1,6 @@
 let map;
+let markers = [];
+const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -16,7 +18,13 @@ function eventOver() {
     const previewAudio = document.querySelector('#preview');
     console.log(request);
     fetch(request).then((response) => response.json()).then(data => {
-        console.log(data);
+        const bar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        const dataObj = {
+            message: `${data.title} - ${data.artists.join(", ")}`,
+            timeout: 20000,
+        };
+
+        bar.show(dataObj);
         previewAudio.src = data.preview_link;
         previewAudio.load();
         previewAudio.play();
@@ -24,7 +32,7 @@ function eventOver() {
 }
 
 function mapMoved() {
-    const bounds = this.getBounds();
+    const bounds = map.getBounds();
 
     const center = bounds.getCenter();
     const ne = bounds.getNorthEast();
@@ -41,7 +49,24 @@ function mapMoved() {
     // distance = circle radius from center to Northeast corner of bounds
     const dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
     //dis contains the radius shown on the map in miles
-    console.log(`${dis} miles`);
+    console.log(`${center.lat()},${center.lng()} => ${dis} miles`);
+    const request = new Request(`/events/location/${center.lat()}/${center.lng()}/${dis}`);
+
+    fetch(request).then((response) => response.json()).then((data) => {
+        console.log(data);
+        markers.forEach(m => m.setMap(null));
+        markers = [];
+        data.forEach((element, index) => {
+            let marker = new google.maps.Marker({
+                "position": { "lat": parseFloat(element.latitude), "lng": parseFloat(element.longitude) },
+                "map": map,
+            });
+            marker.event_id = defaultArtists[index % defaultArtists.length];
+            marker.addListener('mouseover', eventOver);
+            markers.push(marker);
+        });
+    });
+
 }
 
 
@@ -52,23 +77,4 @@ function initMap() {
     });
 
     map.addListener('bounds_changed', mapMoved);
-
-
-    let epflMarker = new google.maps.Marker({
-        position: { lat: 46.5189902, lng: 6.5654067 },
-        map: map,
-    });
-    //the event id is an artist for now, just for testing purposes
-    epflMarker.event_id = "Muse";
-
-    epflMarker.addListener('mouseover', eventOver);
-
-    let hepiaMarker = new google.maps.Marker({
-        position: { lat: 46.2094937, lng: 6.133018 },
-        map: map,
-    });
-
-    hepiaMarker.event_id = "Linkin Park";
-    hepiaMarker.addListener('mouseover', eventOver);
-
 }

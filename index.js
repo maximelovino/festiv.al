@@ -2,6 +2,7 @@ require('dotenv').config({ path: "keys.env" });
 const express = require('express');
 const app = express();
 const artists = require('./controllers/artists');
+const events = require('./controllers/events');
 app.set('view engine', 'pug');
 
 app.use('/material', express.static(__dirname + '/node_modules/material-components-web/dist/'));
@@ -32,10 +33,21 @@ app.get('/artist/:name/picture', (req, res) => {
 //Route to get a random top song of an artist
 app.get('/artist/:name/song', (req, res) => {
     const name = req.params.name;
+    console.log(name);
     artists.getArtistSong(name, (data) => {
         res.contentType('json');
         res.send(data);
     });
+});
+
+
+app.get('/events/location/:lat/:lng/:radius', (req,res) => {
+    console.log("Events endpoint");
+    console.log(req.params);
+    events.getEventsWithLocationAndRadius(req.params.lat,req.params.lng,req.params.radius, (data) => {
+        res.contentType('json');
+        res.send(data);
+    })
 });
 
 app.listen(3000, () => {

@@ -135,7 +135,7 @@ That will return a JSON list of events of the following form:
 For this we will use Eventful with a search around a given location:
 
 ```
-http://api.eventful.com/rest/events/search?app_key=<key>&where=<lat>,<lng>&within=<radius>&date=Future&category=[music,festivals_parades]
+http://api.eventful.com/json/events/search?app_key=<key>&where=<lat>,<lng>&within=<radius>&date=Future&category=[music,festivals_parades]
 ```
 
 Then the idea is to get a list of the top current artists using the spotify API by getting a `toplists` playlist:

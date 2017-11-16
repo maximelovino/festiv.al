@@ -8,6 +8,10 @@ block content
     br
     div#map
     audio#preview(src="")
+    .mdc-snackbar(aria-live="assertive",aria-atomic="true","aria-hidden"="true")
+        .mdc-snackbar__text#snackbarText Hello world
+        .mdc-snackbar__action-wrapper
+            button(type="button").mdc-snackbar__action-button Undo
     script(src='/scripts/materialCalls.js')
     script(src='/scripts/map.js')
     script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initMap`)

@@ -6,6 +6,10 @@ if (navigator.geolocation) {
     });
 }
 
+function degreesToRadians(degreeValue) {
+    return degreeValue * Math.PI / 180;
+}
+
 function eventOver() {
     console.log(this);
     const request = new Request(`/artist/${this.event_id}/song`);
@@ -29,10 +33,10 @@ function mapMoved() {
     const r = 3963.0;
 
     // Convert lat and lng from decimal degrees into radians
-    const lat1 = center.lat() * Math.PI / 180;
-    const lon1 = center.lng() * Math.PI / 180;
-    const lat2 = ne.lat() * Math.PI / 180;
-    const lon2 = ne.lng() * Math.PI / 180;
+    const lat1 = degreesToRadians(center.lat());
+    const lon1 = degreesToRadians(center.lng());
+    const lat2 = degreesToRadians(ne.lat());
+    const lon2 = degreesToRadians(ne.lng());
 
     // distance = circle radius from center to Northeast corner of bounds
     const dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));

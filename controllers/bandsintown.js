@@ -36,9 +36,10 @@ exports.getEventsForArtist = (artistName, callback) => {
 			const data = JSON.parse(body);
 			callback(data);
 		} else {
-			console.log("Problem getting events for artist from bandsInTown");
-			console.log(error);
-			console.log(response);
+			callback([]);
+			//console.log("Problem getting events for artist from bandsInTown");
+			//console.log(error);
+			//console.log(response);
 		}
 	});
 }

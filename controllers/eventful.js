@@ -5,7 +5,7 @@ const KEY = process.env.EVENTFUL;
 exports.getEventsWithLocationAndRadius = (lat,lng, radius, callback) => {
 	const options = {
 		method: "GET",
-		url: `http://api.eventful.com/json/events/search?app_key=${KEY}&where=${lat},${lng}&within=${radius}&date=Future&category=[music,festivals_parades]&page_size=200&sort_order=popularity`,
+		url: `http://api.eventful.com/json/events/search?app_key=${KEY}&where=${lat},${lng}&within=${radius}&date=Future&category=[music,festivals_parades]&page_size=250&sort_order=popularity`,
 	}
 
 	request(options, (error, response, body) => {

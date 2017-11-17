@@ -1,6 +1,7 @@
 let map;
 let markers = [];
 const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
+let events = [];
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -54,11 +55,12 @@ function mapMoved() {
 
     fetch(request).then((response) => response.json()).then((data) => {
         console.log(data);
+        events = data;
         markers.forEach(m => m.setMap(null));
         markers = [];
         data.forEach((element, index) => {
             let marker = new google.maps.Marker({
-                "position": { "lat": parseFloat(element.latitude), "lng": parseFloat(element.longitude) },
+                "position": element.position,
                 "map": map,
             });
             marker.event_id = defaultArtists[index % defaultArtists.length];

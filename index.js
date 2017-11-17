@@ -1,4 +1,5 @@
 require('dotenv').config({ path: "keys.env" });
+const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const artists = require('./controllers/artists');
@@ -8,6 +9,14 @@ app.set('view engine', 'pug');
 app.use('/material', express.static(__dirname + '/node_modules/material-components-web/dist/'));
 app.use('/scripts', express.static(__dirname + '/scripts/'));
 app.use('/css', express.static(__dirname + '/css/'));
+
+
+mongoose.connect(process.env.DATABASE);
+mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
+mongoose.connection.on('error', (err) => {
+    console.error("There was a problem");
+    console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
+});
 
 //Route to get the homepage of the site
 app.get('/', (req, res) => {
@@ -41,10 +50,10 @@ app.get('/artist/:name/song', (req, res) => {
 });
 
 
-app.get('/events/location/:lat/:lng/:radius', (req,res) => {
+app.get('/events/location/:lat/:lng/:radius', (req, res) => {
     console.log("Events endpoint");
     console.log(req.params);
-    events.getEventsWithLocationAndRadius(req.params.lat,req.params.lng,req.params.radius, (data) => {
+    events.getEventsWithLocationAndRadius(req.params.lat, req.params.lng, req.params.radius, (data) => {
         res.contentType('json');
         res.send(data);
     })

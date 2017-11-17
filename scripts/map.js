@@ -2,6 +2,7 @@ let map;
 let markers = [];
 const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
 let events = [];
+let popup;
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -15,7 +16,8 @@ function degreesToRadians(degreeValue) {
 
 function eventOver() {
     console.log(this);
-    const request = new Request(`/artist/${this.event_id}/song`);
+    this.popup.open(map, this);
+    const request = new Request(`/artist/${this.artist}/song`);
     const previewAudio = document.querySelector('#preview');
     console.log(request);
     fetch(request).then((response) => response.json()).then(data => {
@@ -63,8 +65,17 @@ function mapMoved() {
                 "position": element.position,
                 "map": map,
             });
-            marker.event_id = defaultArtists[index % defaultArtists.length];
+            marker.event_id = element.id;
+            marker.artist = defaultArtists[index % defaultArtists.length];
+            marker.event_name = element.name;
+            marker.event_venue = element.venue_name;
+            marker.popup = new google.maps.InfoWindow({
+                content: `${marker.event_name} @${marker.event_venue}`,
+            });
             marker.addListener('mouseover', eventOver);
+            marker.addListener('mouseout', function () {
+                this.popup.close();
+            });
             markers.push(marker);
         });
     });

@@ -1,5 +1,6 @@
 const eventful = require('./eventful');
 const bit = require('./bandsintown');
+const uuid = require('uuid');
 let matching = 0;
 let matched = 0;
 
@@ -10,6 +11,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 		//For each of these, we can try to match with the sameEvent on bandsInTown for the performer
 		//And then match with the venue name for example and the date, so then we can add bands in town info
 		matchEventsFromEventfulWithBandsInTown(eventfulDataWithPerformers, (allData) => {
+			console.log(eventfulDataWithPerformers[0]);
 			const dataToSend = allData.map(d => {
 				return {
 					"name": d.title,
@@ -18,7 +20,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 						"lat": parseFloat(d.latitude),
 						"lng": parseFloat(d.longitude),
 					},
-					"id": d.id,
+					"id": uuid.v4(),
 				};
 			});
 			callback(dataToSend);
@@ -52,7 +54,7 @@ function matchOneEvent(event, callback) {
 	} else {
 		performerName = event.performers.performer.name;
 	}
-	if (performerName == ""){
+	if (performerName == "") {
 		callback(event);
 	}
 	matching++;
@@ -66,7 +68,7 @@ function matchOneEvent(event, callback) {
 				event.bitData = bitEvent
 			}
 			callback(event);
-		}else{
+		} else {
 			callback(event);
 		}
 	});

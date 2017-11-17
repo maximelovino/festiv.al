@@ -76,5 +76,5 @@ function initMap() {
         center: { lat: 0, lng: 0 }
     });
 
-    map.addListener('bounds_changed', mapMoved);
+    map.addListener('idle', mapMoved);
 }

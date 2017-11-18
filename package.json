@@ -2,9 +2,9 @@
   "name": "festiv.al",
   "version": "1.0.0",
   "description": "An app to search music concerts and festivals around you",
-  "main": "index.js",
+  "main": "start.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

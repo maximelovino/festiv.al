@@ -138,20 +138,13 @@ For this we will use Eventful with a search around a given location:
 http://api.eventful.com/json/events/search?app_key=<key>&where=<lat>,<lng>&within=<radius>&date=Future&category=[music,festivals_parades]
 ```
 
-Then the idea is to get a list of the top current artists using the spotify API by getting a `toplists` playlist:
-
-```
-GET https://api.spotify.com/v1/browse/categories/toplists/playlists
-GET https://api.spotify.com/v1/users/spotify/playlists/<playlistID>
-```
-
-Then we can search on BandsInTown for events for these artists and filter only the ones in the displayed area:
+Then we will filter to get only the events showing us a clear list of performers, and we're gonna match these events with BandsInTown by searching for the events of the first performer and matching the venue (and date).
 
 ```
 GET https://rest.bandsintown.com/artists/Muse/events?app_id=<app_id>
 ```
 
-And then we aggregate the informations for all events services by matching the similar events by date, name and location, and we store them in our database.
+Some events are gonna have BandsInTown and some won't.
 
 #### Endpoint to get all events for a given artist
 

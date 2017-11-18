@@ -1,6 +1,8 @@
+const mongoose = require('mongoose')
 const eventful = require('./eventful');
 const bit = require('./bandsintown');
 const uuid = require('uuid');
+const Event = mongoose.model('Event');
 let matching = 0;
 let matched = 0;
 
@@ -13,6 +15,27 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 		matchEventsFromEventfulWithBandsInTown(eventfulDataWithPerformers, (allData) => {
 			console.log(eventfulDataWithPerformers[0]);
 			const dataToSend = allData.map(d => {
+				let lineup = [];
+				if (Array.isArray(d.performers.performer)) {
+					lineup = d.performers.performer.map(p => p.name);
+				} else {
+					lineup.push(d.performers.performer.name);
+				}
+
+				const date = d.start_time.substr(0, 10);
+
+				let ticketLink = "";
+
+				if (d.bitData) {
+					const entry = d.bitData.offers.find(el => el.type === "Tickets");
+					if (entry){
+						ticketLink = entry.url;
+					}else{
+						ticketLink = "";
+					}
+					//TODO filter and map this to include link
+				}
+
 				return {
 					"name": d.title,
 					"venue_name": d.venue_name,
@@ -20,10 +43,23 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 						"lat": parseFloat(d.latitude),
 						"lng": parseFloat(d.longitude),
 					},
+					"lineup": lineup,
 					"id": uuid.v4(),
+					"date": date,
+					"description": d.description || "",
+					"ticketshop": ticketLink,
 				};
 			});
 			callback(dataToSend);
+			dataToSend.forEach(d => {
+				(new Event(d)).save().then((e) => {
+					console.log("Insertion alright");
+					console.log(e);
+				}).catch(error => {
+					console.log("There was a problem with inserting into the DB");
+					console.log(error);
+				});
+			});
 		});
 	});
 };

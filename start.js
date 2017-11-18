@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config({ path: 'keys.env' });
 
-mongoose.connect(process.env.DATABASE);
+mongoose.connect(process.env.DATABASE, {useMongoClient:true});
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
 require('./models/Event');
 mongoose.connection.on('error', (err) => {

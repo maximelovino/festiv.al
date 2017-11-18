@@ -5,6 +5,7 @@
   "main": "start.js",
   "scripts": {
     "start": "nodemon start.js",
+    "doc": "apidoc -i routes/ -o doc/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -102,10 +102,10 @@ function matchOneEvent(event, callback) {
 exports.getSongForEvent = async (id, callback) => {
 	const event = await Event.findOne({ id });
 	if (!event) {
-		callback({})
+		callback(null);
 		return;
 	}
-
+	//pick a random artist from the lineup
 	const artist = event.lineup[Math.floor(Math.random() * event.lineup.length)];
 
 	artists.getArtistSong(artist, (song) => {
@@ -116,8 +116,10 @@ exports.getSongForEvent = async (id, callback) => {
 
 exports.getSingleEvent = async (id, callback) => {
 	const event = await Event.findOne({ id });
-	if (!event)
-		callback({});
-	else
+	if (!event){
+		console.log("Event not found, returning null");
+		callback(null);
+	}else{
 		callback(event);
+	}
 };

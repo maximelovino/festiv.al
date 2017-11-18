@@ -58,7 +58,7 @@ function getArtist(artistName, callback) {
                 if (!tokenRefreshed)
                     generateToken(() => getArtist(artistName, callback))
                 else
-                    callback({});
+                    callback(null);
             }
         })
     }
@@ -77,7 +77,7 @@ function getPictureForAnArtist(artistName, callback) {
 function getSongForArtist(artistName, callback, country = "US") {
     getArtist(artistName, (artist) => {
         if (!artist) {
-            callback({});
+            callback(null);
             return;
         }
         const id = artist.id;
@@ -106,9 +106,13 @@ function getSongForArtist(artistName, callback, country = "US") {
                     };
                 });
                 tokenRefreshed = false;
-                if (choices.length == 0 && index < countries.length - 1) {
-                    getSongForArtist(artistName, callback, countries[index]);
-                    index++;
+                if (choices.length == 0) {
+                    if(index < countries.length - 1){
+                        getSongForArtist(artistName, callback, countries[index]);
+                        index++;
+                    }else{
+                        callback(null);
+                    }
                 } else {
                     index = 0;
                     const toSend = choices[Math.floor(Math.random() * choices.length)]
@@ -119,7 +123,7 @@ function getSongForArtist(artistName, callback, country = "US") {
                 if (!tokenRefreshed)
                     generateToken(() => getSongForArtist(artistName, callback))
                 else
-                    callback({})
+                    callback(null)
             }
         })
 

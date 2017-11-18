@@ -1,6 +1,5 @@
 let map;
 let markers = [];
-const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
 const stopButton = document.querySelector('#stopButton');
 
 stopButton.addEventListener('click', () => {
@@ -19,12 +18,11 @@ function degreesToRadians(degreeValue) {
 }
 
 function eventOver() {
-    console.log(this);
     this.popup.open(map, this);
     const request = new Request(`events/${this.event_id}/song`);
     const previewAudio = document.querySelector('#preview');
-    console.log(request);
     fetch(request).then((response) => response.json()).then(data => {
+        console.log(JSON.stringify(data));
         const songTitle = document.querySelector('#songTitle');
         const songArtists = document.querySelector('#songArtists');
         const songCover = document.querySelector('#songCover');
@@ -75,7 +73,6 @@ function mapMoved() {
                 "map": map,
             });
             marker.event_id = element.id;
-            marker.artist = defaultArtists[index % defaultArtists.length];
             marker.event_name = element.name;
             marker.event_venue = element.venue_name;
             marker.popup = new google.maps.InfoWindow({
@@ -96,7 +93,7 @@ function mapMoved() {
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 10,
-        center: { lat: 0, lng: 0 }
+        center: { lat: 46.20949, lng: 6.135212 }
     });
 
     map.addListener('idle', mapMoved);

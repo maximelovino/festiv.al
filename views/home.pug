@@ -7,6 +7,13 @@ block content
         .mdc-textfield__bottom-line
     br
     div#map
+    div(role="progressbar").mdc-linear-progress#progressBar
+        .mdc-linear-progress__buffering-dots
+        .mdc-linear-progress__buffer
+        .mdc-linear-progress__bar.mdc-linear-progress__primary-bar
+            span.mdc-linear-progress__bar-inner
+        .mdc-linear-progress__bar.mdc-linear-progress__secondary-bar
+            span.mdc-linear-progress__bar-inner
     audio#preview(src="")
     .mdc-snackbar(aria-live="assertive",aria-atomic="true","aria-hidden"="true")
         .mdc-snackbar__text#snackbarText Hello world

@@ -1,8 +1,6 @@
 let map;
 let markers = [];
 const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
-let events = [];
-let popup;
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -34,6 +32,11 @@ function eventOver() {
     });
 }
 
+
+function eventClick(){
+    window.location.href = `/events/${this.event_id}/detail`;
+}
+
 function mapMoved() {
     const bounds = map.getBounds();
 
@@ -54,10 +57,11 @@ function mapMoved() {
     //dis contains the radius shown on the map in miles
     console.log(`${center.lat()},${center.lng()} => ${dis} miles`);
     const request = new Request(`/events/location/${center.lat()}/${center.lng()}/${dis}`);
-
+    const bar = document.querySelector('#progressBar');
+    bar.classList.add('mdc-linear-progress--indeterminate');
     fetch(request).then((response) => response.json()).then((data) => {
+        bar.classList.remove('mdc-linear-progress--indeterminate');
         console.log(data);
-        events = data;
         markers.forEach(m => m.setMap(null));
         markers = [];
         data.forEach((element, index) => {
@@ -76,6 +80,7 @@ function mapMoved() {
             marker.addListener('mouseout', function () {
                 this.popup.close();
             });
+            marker.addListener('click', eventClick)
             markers.push(marker);
         });
     });

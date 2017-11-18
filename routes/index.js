@@ -52,4 +52,10 @@ router.get('/events/:id/song', (req,res) => {
     })
 });
 
+router.get('/events/:id/detail', (req,res) => {
+    events.getSingleEvent(req.params.id, (event) => {
+        res.json(event);
+    })
+});
+
 module.exports = router;

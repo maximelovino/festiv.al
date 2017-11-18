@@ -26,9 +26,9 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 
 				if (d.bitData) {
 					const entry = d.bitData.offers.find(el => el.type === "Tickets");
-					if (entry){
+					if (entry) {
 						ticketLink = entry.url;
-					}else{
+					} else {
 						ticketLink = "";
 					}
 				}
@@ -50,9 +50,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 			callback(dataToSend);
 			//DB insertion
 			dataToSend.forEach(d => {
-				(new Event(d)).save().then((e) => {
-					console.log("Insertion alright");
-				}).catch(error => {
+				(new Event(d)).save().then().catch(error => {
 					console.log("There was a problem with inserting into the DB");
 					console.log(error);
 				});
@@ -102,17 +100,24 @@ function matchOneEvent(event, callback) {
 }
 
 exports.getSongForEvent = async (id, callback) => {
-	const event = await Event.findOne({id});
-	if (!event){
+	const event = await Event.findOne({ id });
+	if (!event) {
 		callback({})
 		return;
 	}
-
-	const lineup = event.lineup;
 
 	const artist = event.lineup[Math.floor(Math.random() * event.lineup.length)];
 
 	artists.getArtistSong(artist, (song) => {
 		callback(song);
 	});
-}
+};
+
+
+exports.getSingleEvent = async (id, callback) => {
+	const event = await Event.findOne({ id });
+	if (!event)
+		callback({});
+	else
+		callback(event);
+};

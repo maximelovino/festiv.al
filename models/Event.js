@@ -16,7 +16,7 @@ const eventSchema = new mongoose.Schema({
 	},
 	lineup: [String],
 	id: {
-		type: Number,
+		type: String,
 		required: true,
 	},
 	date: {

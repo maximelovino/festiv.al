@@ -34,13 +34,21 @@ router.get('/artist/:name/song', (req, res) => {
     });
 });
 
-
+//Route to get events around a given location
 router.get('/events/location/:lat/:lng/:radius', (req, res) => {
     console.log("Events endpoint");
     console.log(req.params);
     events.getEventsWithLocationAndRadius(req.params.lat, req.params.lng, req.params.radius, (data) => {
         res.contentType('json');
         res.send(data);
+    })
+});
+
+//Route to get a song from an event
+router.get('/events/:id/song', (req,res) => {
+    events.getSongForEvent(req.params.id, (song) => {
+        res.contentType('json');
+        res.send(song);
     })
 });
 

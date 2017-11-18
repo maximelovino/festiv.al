@@ -17,7 +17,7 @@ function degreesToRadians(degreeValue) {
 function eventOver() {
     console.log(this);
     this.popup.open(map, this);
-    const request = new Request(`/artist/${this.artist}/song`);
+    const request = new Request(`events/${this.event_id}/song`);
     const previewAudio = document.querySelector('#preview');
     console.log(request);
     fetch(request).then((response) => response.json()).then(data => {

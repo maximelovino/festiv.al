@@ -3,8 +3,7 @@ const eventful = require('./eventful');
 const bit = require('./bandsintown');
 const uuid = require('uuid');
 const Event = mongoose.model('Event');
-let matching = 0;
-let matched = 0;
+const artists = require('./artists');
 
 exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 	eventful.getEventsWithLocationAndRadius(lat, lng, radius, (data) => {
@@ -13,7 +12,6 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 		//For each of these, we can try to match with the sameEvent on bandsInTown for the performer
 		//And then match with the venue name for example and the date, so then we can add bands in town info
 		matchEventsFromEventfulWithBandsInTown(eventfulDataWithPerformers, (allData) => {
-			console.log(eventfulDataWithPerformers[0]);
 			const dataToSend = allData.map(d => {
 				let lineup = [];
 				if (Array.isArray(d.performers.performer)) {
@@ -33,7 +31,6 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 					}else{
 						ticketLink = "";
 					}
-					//TODO filter and map this to include link
 				}
 
 				return {
@@ -51,10 +48,10 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 				};
 			});
 			callback(dataToSend);
+			//DB insertion
 			dataToSend.forEach(d => {
 				(new Event(d)).save().then((e) => {
 					console.log("Insertion alright");
-					console.log(e);
 				}).catch(error => {
 					console.log("There was a problem with inserting into the DB");
 					console.log(error);
@@ -65,15 +62,12 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 };
 
 function matchEventsFromEventfulWithBandsInTown(eventfulData, callback) {
-	console.log("Hello from matching function")
 	let fullDataArray = [];
 	if (eventfulData.length == 0) {
 		callback(fullDataArray);
 	}
 	eventfulData.forEach(event => {
 		matchOneEvent(event, (data) => {
-			matched++;
-			console.log(`We got something back from one match, ${matched}`);
 			fullDataArray.push(data);
 			if (fullDataArray.length == eventfulData.length) {
 				callback(fullDataArray);
@@ -93,19 +87,32 @@ function matchOneEvent(event, callback) {
 	if (performerName == "") {
 		callback(event);
 	}
-	matching++;
-	console.log(`Hello from individual matching ${performerName}, ${matching}`);
 	bit.getEventsForArtist(performerName, (bitData) => {
 		if (bitData.length !== 0) {
 			//TODO we should match on date as well as venue
 			const bitEvent = bitData.find(e => e.venue.name.toLowerCase() == event.venue_name.toLowerCase());
 			if (bitEvent) {
-				console.log("WE'VE GOT A GOOD MATCH");
 				event.bitData = bitEvent
 			}
 			callback(event);
 		} else {
 			callback(event);
 		}
+	});
+}
+
+exports.getSongForEvent = async (id, callback) => {
+	const event = await Event.findOne({id});
+	if (!event){
+		callback({})
+		return;
+	}
+
+	const lineup = event.lineup;
+
+	const artist = event.lineup[Math.floor(Math.random() * event.lineup.length)];
+
+	artists.getArtistSong(artist, (song) => {
+		callback(song);
 	});
 }

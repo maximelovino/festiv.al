@@ -4,8 +4,9 @@ let request = require('request');
 const spotifyID = process.env.SPOTIFY_ID;
 const spotifySecret = process.env.SPOTIFY_SECRET;
 let token = "";
-const countries = ["US", "GB", "CH","FR","ES"];
+const countries = ["US", "GB", "CH", "FR", "ES"];
 let index = 0;
+let tokenRefreshed = false;
 
 function generateToken(callback) {
     console.log("Entered the token function");
@@ -26,6 +27,7 @@ function generateToken(callback) {
             const data = JSON.parse(body);
             token = data.access_token;
             console.log(`TOKEN ${token}`);
+            tokenRefreshed = true;
             callback();
         }
     });
@@ -49,10 +51,14 @@ function getArtist(artistName, callback) {
             if (!error && response.statusCode == 200) {
                 const data = JSON.parse(body);
                 const artist = data.artists.items[0];
+                tokenRefreshed = false;
                 callback(artist);
             } else {
                 console.log("PROBLEM in getting artist info");
-                generateToken(() => getArtist(artistName, callback))
+                if (!tokenRefreshed)
+                    generateToken(() => getArtist(artistName, callback))
+                else
+                    callback({});
             }
         })
     }
@@ -68,8 +74,12 @@ function getPictureForAnArtist(artistName, callback) {
     });
 }
 
-function getSongForArtist(artistName, callback, country="US") {
+function getSongForArtist(artistName, callback, country = "US") {
     getArtist(artistName, (artist) => {
+        if (!artist) {
+            callback({});
+            return;
+        }
         const id = artist.id;
         console.log(id, country);
 
@@ -95,17 +105,21 @@ function getSongForArtist(artistName, callback, country="US") {
                         'preview_link': t.preview_url,
                     };
                 });
-                if(choices.length == 0 && index < countries.length -1){
+                tokenRefreshed = false;
+                if (choices.length == 0 && index < countries.length - 1) {
                     getSongForArtist(artistName, callback, countries[index]);
                     index++;
-                }else{
+                } else {
                     index = 0;
                     const toSend = choices[Math.floor(Math.random() * choices.length)]
                     callback(toSend);
                 }
             } else {
                 console.log("PROBLEM in getting top tracks");
-                generateToken(() => getSongForArtist(artistName, callback))
+                if (!tokenRefreshed)
+                    generateToken(() => getSongForArtist(artistName, callback))
+                else
+                    callback({})
             }
         })
 

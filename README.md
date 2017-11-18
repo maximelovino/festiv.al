@@ -128,7 +128,11 @@ That will return a JSON list of events of the following form:
   "name": "<name>",
   "venue_name": "<venue_name>",
   "position": {"lat": "<lat>", "lng": "<lng>"},
+  "lineup": ["<artist1_name>","<artist2_name>","..."],
   "id": "<event_id>",
+  "date": "<date>",
+  "description": "<description>",
+  "ticketshop": "<ticketshop_link>"
 }
 ```
 
@@ -170,26 +174,23 @@ This will return a response like the one for the artist song.
 
 Our backend is gonna look at the lineup and pick an artist and use the Spotify route to get a song.
 
-#### Endpoint to get detail for an event
+## Website pages
+
+### Home page
+
+```
+GET /
+```
+
+This is the home page of our website, containing the interactive map. The basic page is rendered server-side with Pug and sent to the client, then fetch requests are made for getting events and playing songs.
+
+### Event detail page
 
 ```
 GET /events/<event_id>/detail
 ```
 
-This will return JSON of the form:
-
-```json
-{
-  "name": "<name>",
-  "venue_name": "<venue_name>",
-  "position": {"lat": "<lat>", "lng": "<lng>"},
-  "lineup": ["<artist1_name>","<artist2_name>","..."],
-  "id": "<event_id>",
-  "date": "<date>",
-  "description": "<description>",
-  "ticketshop": "<ticketshop_link>"
-}
-```
+This will be a page with the details about a specific event. The page will be rendered server-side with Pug and sent to the client.
 
 ## Technologies chosen
 
@@ -199,4 +200,8 @@ We decided to go with Node.js because of the wide support and community around i
 
 ### Aggregation of the different events informations providers
 
-We're gonna group the informations coming from the events providers API by putting them in a database and generating an `event_id` in our database that we're gonna send to the client to identify uniquely an event. For the database, we're gonna use MySQL.
+We're gonna group the informations coming from the events providers API by putting them in a database and generating an `event_id` in our database that we're gonna send to the client with the event to identify uniquely an event. For the database, we're gonna use MongoDB because of its good integration with Node.js and the data that we want to store fits well into that model.
+
+We insert into the database every event we send after a request, even if this event was already in the DB. The DB is only used to get back the details of the events if the user clicks on details.
+
+Every insertion has a TTL of 7200s, so it's removed from the DB after 2 hours.

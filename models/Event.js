@@ -25,6 +25,11 @@ const eventSchema = new mongoose.Schema({
 	},
 	description: String,
 	ticketshop: String,
+	created: {
+		type: Date,
+		default: Date.now,
+		expires: 7200,
+	},
 });
 
 module.exports = mongoose.model('Event', eventSchema);

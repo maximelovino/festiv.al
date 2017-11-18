@@ -2,10 +2,6 @@ extends layout
 
 block content
     - const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
-    .mdc-textfield.mdc-textfield--fullwidth.mdc-textfield--upgraded
-        input(type="text" placeholder="Search").mdc-textfield__input
-        .mdc-textfield__bottom-line
-    br
     div#map
     div(role="progressbar").mdc-linear-progress#progressBar
         .mdc-linear-progress__buffering-dots
@@ -14,11 +10,14 @@ block content
             span.mdc-linear-progress__bar-inner
         .mdc-linear-progress__bar.mdc-linear-progress__secondary-bar
             span.mdc-linear-progress__bar-inner
+    .mdc-card.nowPlayingCard
+        section.mdc-card__media.mdc-card__media__now-playing#songCover
+        section.mdc-card__primary
+            h1.mdc-card__title.mdc-card__title--large#songTitle Nothing played yet
+            h2.mdc-card__subtitle#songArtists
+        section.mdc-card__actions
+            button.mdc-button.mdc-button--compact.mdc-card__action#stopButton Stop the music
     audio#preview(src="")
-    .mdc-snackbar(aria-live="assertive",aria-atomic="true","aria-hidden"="true")
-        .mdc-snackbar__text#snackbarText Hello world
-        .mdc-snackbar__action-wrapper
-            button(type="button").mdc-snackbar__action-button Undo
     script(src='/scripts/materialCalls.js')
     script(src='/scripts/map.js')
     script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initMap`)

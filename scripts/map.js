@@ -1,6 +1,12 @@
 let map;
 let markers = [];
 const defaultArtists = ["Pink Floyd", "Muse", "Linkin Park", "Dire Straits", "Eminem", "Imagine Dragons"];
+const stopButton = document.querySelector('#stopButton');
+
+stopButton.addEventListener('click', () => {
+    const previewAudio = document.querySelector('#preview');
+    previewAudio.pause();
+});
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -19,13 +25,12 @@ function eventOver() {
     const previewAudio = document.querySelector('#preview');
     console.log(request);
     fetch(request).then((response) => response.json()).then(data => {
-        const bar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
-        const dataObj = {
-            message: `${data.title} - ${data.artists.join(", ")}`,
-            timeout: 20000,
-        };
-
-        bar.show(dataObj);
+        const songTitle = document.querySelector('#songTitle');
+        const songArtists = document.querySelector('#songArtists');
+        const songCover = document.querySelector('#songCover');
+        songTitle.innerHTML = data.title;
+        songArtists.innerHTML = data.artists.join(", ");
+        songCover.style.backgroundImage = `url(${data.cover_img})`;
         previewAudio.src = data.preview_link;
         previewAudio.load();
         previewAudio.play();

@@ -3,10 +3,28 @@ const events = require('../controllers/events');
 const express = require('express');
 const router = express.Router();
 
+/**
+ * Pages routes
+ */
+
 //Route to get the homepage of the site
 router.get('/', (req, res) => {
     res.render('home');
 });
+
+//Route to get the details page of a specific event
+router.get('/events/:id/detail', (req, res) => {
+    events.getSingleEvent(req.params.id, (event) => {
+        if (event)
+            res.render('eventDetail', {event});
+        else
+            res.sendStatus(404);
+    })
+});
+
+/**
+ * API Routes
+ */
 
 //Route to get the infos of an artist
 router.get('/artist/:name/infos', (req, res) => {
@@ -58,7 +76,7 @@ router.get('/events/location/:lat/:lng/:radius', (req, res) => {
  * 
  * @apiParamExample  {String} Request-Example:
     {
-        id : c10960e9-848e-46aa-a823-45ea82b0a18e
+        "id" : "c10960e9-848e-46aa-a823-45ea82b0a18e"
     }
  * 
  * 
@@ -81,16 +99,6 @@ router.get('/events/:id/song', (req, res) => {
         } else {
             res.sendStatus(404);
         }
-    })
-});
-
-//Route to get the details of a specific event, gonna be changed to render a page
-router.get('/events/:id/detail', (req, res) => {
-    events.getSingleEvent(req.params.id, (event) => {
-        if (event)
-            res.render('eventDetail', {event});
-        else
-            res.sendStatus(404);
     })
 });
 

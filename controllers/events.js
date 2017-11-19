@@ -49,12 +49,12 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 			});
 			callback(dataToSend);
 			//DB insertion
-			dataToSend.forEach(d => {
-				(new Event(d)).save().then().catch(error => {
-					console.log("There was a problem with inserting into the DB");
-					console.log(error);
-				});
+			const promises = dataToSend.map(d => new Event(d).save());
+			Promise.all(promises).then(() => console.log("inserted everything well")).catch(e => {
+				console.log("There was a problem inserting");
+				console.log(e);
 			});
+
 		});
 	});
 };

@@ -18,6 +18,7 @@ exports.getArtistByID = (mbid, callback) => {
 			console.log("Problem getting events for artist from bandsInTown");
 			console.log(error);
 			console.log(response);
+			callback(null);
 		}
 	})
 };
@@ -34,12 +35,17 @@ exports.getArtistByName = (artistName, callback) => {
 	request(options, (error, response, body) => {
 		if (!error && response.statusCode == 200) {
 			const data = JSON.parse(body);
-			const firstResult = data.artists[0];
-			callback(firstResult);
+			if (data.artists && data.artists[0]) {
+				const firstResult = data.artists[0];
+				callback(firstResult);
+			} else {
+				callback(null);
+			}
 		} else {
 			console.log("Problem getting events for artist from bandsInTown");
 			console.log(error);
 			console.log(response);
+			callback(null);
 		}
 	})
 }

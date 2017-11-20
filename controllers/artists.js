@@ -5,8 +5,11 @@ const spotify = require('./spotify');
 exports.getSingleArtistInfos = (artistName, callback) => {
 	bit.getSingleArtist(artistName, (bitData) => {
 		spotify.getArtist(artistName, (spotifyData) => {
-
 			function sendWithBrainzData(brainz) {
+				if (!brainz || !spotifyData || !bitData) {
+					callback(null);
+					return;
+				}
 				const artist = {
 					'name': bitData.name,
 					'country': brainz.country,
@@ -19,7 +22,7 @@ exports.getSingleArtistInfos = (artistName, callback) => {
 				callback(artist);
 			}
 
-			if (bitData.mbid == "" || bitData.mbid == null) {
+			if (!bitData || bitData.mbid == "" || bitData.mbid == null) {
 				musicbrainz.getArtistByName(artistName, sendWithBrainzData);
 			} else {
 				musicbrainz.getArtistByID(bitData.mbid, sendWithBrainzData);

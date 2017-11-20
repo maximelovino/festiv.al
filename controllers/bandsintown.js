@@ -18,6 +18,7 @@ exports.getSingleArtist = (artistName, callback) => {
 			console.log("Problem getting artist from bandsInTown");
 			console.log(error);
 			console.log(response);
+			callback(null);
 		}
 	});
 }
@@ -36,10 +37,10 @@ exports.getEventsForArtist = (artistName, callback) => {
 			const data = JSON.parse(body);
 			callback(data);
 		} else {
-			callback([]);
-			//console.log("Problem getting events for artist from bandsInTown");
-			//console.log(error);
-			//console.log(response);
+			console.log("Problem getting events for artist from bandsInTown");
+			console.log(error);
+			console.log(response);
+			callback(null);
 		}
 	});
 }

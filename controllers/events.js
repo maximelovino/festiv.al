@@ -7,7 +7,15 @@ const artists = require('./artists');
 
 exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 	eventful.getEventsWithLocationAndRadius(lat, lng, radius, (data) => {
+		if (!data) {
+			callback(null);
+			return;
+		}
 		const eventfulDataWithPerformers = data.filter(d => d.performers !== null);
+		if (eventfulDataWithPerformers.length == 0) {
+			callback(null);
+			return;
+		}
 		//So here, we have a list of events from eventful that contains performers
 		//For each of these, we can try to match with the sameEvent on bandsInTown for the performer
 		//And then match with the venue name for example and the date, so then we can add bands in town info
@@ -24,12 +32,10 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 
 				let ticketLink = "";
 
-				if (d.bitData) {
+				if (d.bitData && d.bitData.offers) {
 					const entry = d.bitData.offers.find(el => el.type === "Tickets");
 					if (entry) {
 						ticketLink = entry.url;
-					} else {
-						ticketLink = "";
 					}
 				}
 
@@ -49,21 +55,14 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 			});
 			callback(dataToSend);
 			//DB insertion
-			const promises = dataToSend.map(d => new Event(d).save());
-			Promise.all(promises).then(() => console.log("inserted everything well")).catch(e => {
-				console.log("There was a problem inserting");
-				console.log(e);
-			});
-
+			Event.insertMany(dataToSend).then(console.log("inserted everything well")).catch(e => console.log(e));
 		});
 	});
 };
 
 function matchEventsFromEventfulWithBandsInTown(eventfulData, callback) {
 	let fullDataArray = [];
-	if (eventfulData.length == 0) {
-		callback(fullDataArray);
-	}
+	//TODO use promises in these functions so we can wait with Promise.all
 	eventfulData.forEach(event => {
 		matchOneEvent(event, (data) => {
 			fullDataArray.push(data);
@@ -86,16 +85,14 @@ function matchOneEvent(event, callback) {
 		callback(event);
 	}
 	bit.getEventsForArtist(performerName, (bitData) => {
-		if (bitData.length !== 0) {
+		if (bitData && bitData.length !== 0) {
 			//TODO we should match on date as well as venue
 			const bitEvent = bitData.find(e => e.venue.name.toLowerCase() == event.venue_name.toLowerCase());
 			if (bitEvent) {
 				event.bitData = bitEvent
 			}
-			callback(event);
-		} else {
-			callback(event);
 		}
+		callback(event);
 	});
 }
 
@@ -116,10 +113,10 @@ exports.getSongForEvent = async (id, callback) => {
 
 exports.getSingleEvent = async (id, callback) => {
 	const event = await Event.findOne({ id });
-	if (!event){
+	if (!event) {
 		console.log("Event not found, returning null");
 		callback(null);
-	}else{
+	} else {
 		callback(event);
 	}
 };

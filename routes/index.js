@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 router.get('/events/:id/detail', (req, res) => {
     events.getSingleEvent(req.params.id, (event) => {
         if (event)
-            res.render('eventDetail', {event});
+            res.render('eventDetail', { event });
         else
             res.sendStatus(404);
     })
@@ -34,21 +34,81 @@ router.get('/artist/:name/infos', (req, res) => {
     })
 });
 
-//Route to get the picture of an artist
+/**
+ * 
+ * @api {GET} /artist/:name/picture Get a picture from an artist
+ * @apiName GetArtistPicture
+ * @apiGroup Artists
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * @apiParam  {String} name The artist name
+ * 
+ * @apiSuccess (200) {String} name The name of the artist
+ * @apiSuccess (200) {String} picture The url of the picture
+ * 
+ * @apiParamExample  {String} Request-Example:
+    {
+        "name" : "Muse"
+    }
+ * 
+ * 
+ * @apiSuccessExample {Object} Success-Response:
+    {
+        "name": "Muse",
+        "picture": "https://i.scdn.co/image/19ac88c7aec1f68aa6e207aff29efa15d37336a7"
+    }
+ * 
+ * 
+ */
 router.get('/artist/:name/picture', (req, res) => {
     artists.getArtistPicture(req.params.name, (data) => {
-        res.contentType('json');
-        res.send(data);
+        if (data)
+            res.json(data);
+        else
+            res.sendStatus(404);
     })
 });
 
-//Route to get a random top song of an artist
+/**
+ * 
+ * @api {GET} /artist/:name/song Get a song from an artist
+ * @apiName GetArtistSong
+ * @apiGroup Artists
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * @apiParam  {String} name The artist name
+ * 
+ * @apiSuccess (200) {String} title The title of the song
+ * @apiSuccess (200) {String[]} artists The artists of the song
+ * @apiSuccess (200) {String} cover_img The url of the song cover image
+ * @apiSuccess (200) {String} preview_link The url of the song preview
+ * 
+ * @apiParamExample  {String} Request-Example:
+    {
+        "name" : "Muse"
+    }
+ * 
+ * 
+ * @apiSuccessExample {Object} Success-Response:
+    {
+        "title": "Supermassive Black Hole",
+        "artists": ["Muse"],
+        "cover_img": "https://i.scdn.co/image/9e5288926fadb82f873ccf2b45300c3a6f65fa14",
+        "preview_link": "https://p.scdn.co/mp3-preview/7ab3e38ce1671da3a185d8685981983a6f39b7bd?cid=49db2e64f73b47a79bef41d3356efdfc"
+    }
+ * 
+ * 
+ */
 router.get('/artist/:name/song', (req, res) => {
     const name = req.params.name;
     console.log(name);
     artists.getArtistSong(name, (data) => {
-        res.contentType('json');
-        res.send(data);
+        if (data)
+            res.json(data);
+        else
+            res.sendStatus(404);
     });
 });
 
@@ -72,7 +132,10 @@ router.get('/events/location/:lat/:lng/:radius', (req, res) => {
  * 
  * @apiParam  {String} id The id of the event
  * 
- * @apiSuccess (200) {Object} SongEntry An entry for a song with link to preview, cover, title and artists
+ * @apiSuccess (200) {String} title The title of the song
+ * @apiSuccess (200) {String[]} artists The artists of the song
+ * @apiSuccess (200) {String} cover_img The url of the song cover image
+ * @apiSuccess (200) {String} preview_link The url of the song preview
  * 
  * @apiParamExample  {String} Request-Example:
     {
@@ -83,9 +146,7 @@ router.get('/events/location/:lat/:lng/:radius', (req, res) => {
  * @apiSuccessExample {Object} Success-Response:
     {
         "title": "Le suicide",
-        "artists": [
-            "Barcella"
-        ],
+        "artists": ["Barcella"],
         "cover_img": "https://i.scdn.co/image/5216c34f96935ba3af55da1237dada03b1618c31",
         "preview_link": "https://p.scdn.co/mp3-preview/a77d9b92bb2df6fc71a44c7517850000c095714d?cid=49db2e64f73b47a79bef41d3356efdfc"
     }

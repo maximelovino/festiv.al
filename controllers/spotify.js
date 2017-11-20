@@ -66,11 +66,15 @@ function getArtist(artistName, callback) {
 
 function getPictureForAnArtist(artistName, callback) {
     getArtist(artistName, (artist) => {
-        const toSend = {
-            "name": artist.name,
-            "picture": artist.images[0].url,
+        if (artist && artist.images && artist.images[0].url) {
+            const toSend = {
+                "name": artist.name,
+                "picture": artist.images[0].url,
+            }
+            callback(toSend);
+        } else {
+            callback(null);
         }
-        callback(toSend);
     });
 }
 
@@ -107,10 +111,10 @@ function getSongForArtist(artistName, callback, country = "US") {
                 });
                 tokenRefreshed = false;
                 if (choices.length == 0) {
-                    if(index < countries.length - 1){
+                    if (index < countries.length - 1) {
                         getSongForArtist(artistName, callback, countries[index]);
                         index++;
-                    }else{
+                    } else {
                         callback(null);
                     }
                 } else {

@@ -36,7 +36,7 @@ function eventOver() {
 }
 
 
-function eventClick(){
+function eventClick() {
     window.location.href = `/events/${this.event_id}/detail`;
 }
 
@@ -65,25 +65,25 @@ function mapMoved() {
     fetch(request).then((response) => response.json()).then((data) => {
         bar.classList.remove('mdc-linear-progress--indeterminate');
         console.log(data);
-        markers.forEach(m => m.setMap(null));
-        markers = [];
-        data.forEach((element, index) => {
-            let marker = new google.maps.Marker({
-                "position": element.position,
-                "map": map,
-            });
-            marker.event_id = element.id;
-            marker.event_name = element.name;
-            marker.event_venue = element.venue_name;
-            marker.popup = new google.maps.InfoWindow({
-                content: `${marker.event_name} @${marker.event_venue}`,
-            });
-            marker.addListener('mouseover', eventOver);
-            marker.addListener('mouseout', function () {
-                this.popup.close();
-            });
-            marker.addListener('click', eventClick)
-            markers.push(marker);
+        data.forEach((element) => {
+            if (!markers.find(marker => marker.position.lat == element.position.lat && marker.position.lng == element.position.lng)) {
+                let marker = new google.maps.Marker({
+                    "position": element.position,
+                    "map": map,
+                });
+                marker.event_id = element.id;
+                marker.event_name = element.name;
+                marker.event_venue = element.venue_name;
+                marker.popup = new google.maps.InfoWindow({
+                    content: `${marker.event_name} @${marker.event_venue}`,
+                });
+                marker.addListener('mouseover', eventOver);
+                marker.addListener('mouseout', function () {
+                    this.popup.close();
+                });
+                marker.addListener('click', eventClick)
+                markers.push(marker);
+            }
         });
     });
 

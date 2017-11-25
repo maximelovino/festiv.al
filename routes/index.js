@@ -180,7 +180,7 @@ router.get('/artist/:name/song', (req, res) => {
  * @apiSuccess (200) {Number} events.location.lng The longitude of the event
  * @apiSuccess (200) {String[]} events.lineup The lineup of the event
  * @apiSuccess (200) {String} events.id The id of the event
- * @apiSuccess (200) {String} events.data The data of the event in format YYYY-MM-DD
+ * @apiSuccess (200) {String} events.date The date of the event in format YYYY-MM-DD
  * @apiSuccess (200) {String} events.description The description of the event
  * @apiSuccess (200) {String} events.ticketshop The link to the ticketshop
  * 

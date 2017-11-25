@@ -13,10 +13,6 @@ if (navigator.geolocation) {
     });
 }
 
-function degreesToRadians(degreeValue) {
-    return degreeValue * Math.PI / 180;
-}
-
 function eventOver() {
     this.popup.open(map, this);
     const request = new Request(`events/${this.event_id}/song`);
@@ -40,53 +36,52 @@ function eventClick() {
     window.location.href = `/events/${this.event_id}/detail`;
 }
 
+function putDataOnMap(data) {
+    data.forEach((element) => {
+        //this the duplicate marker check
+        if (!markers.find(marker => marker.position.lat == element.position.lat && marker.position.lng == element.position.lng)) {
+            let marker = new google.maps.Marker({
+                "position": element.position,
+                "map": map,
+            });
+            marker.event_id = element.id;
+            marker.event_name = element.name;
+            marker.event_venue = element.venue_name;
+            marker.popup = new google.maps.InfoWindow({
+                content: `${marker.event_name} @${marker.event_venue}`,
+            });
+            marker.addListener('mouseover', eventOver);
+            marker.addListener('mouseout', function () {
+                this.popup.close();
+            });
+            marker.addListener('click', eventClick)
+            markers.push(marker);
+        }
+    });
+}
+
 function mapMoved() {
     const bounds = map.getBounds();
-
     const center = bounds.getCenter();
     const ne = bounds.getNorthEast();
-
-    // r = radius of the earth in statute miles
-    const r = 3963.0;
-
-    // Convert lat and lng from decimal degrees into radians
-    const lat1 = degreesToRadians(center.lat());
-    const lon1 = degreesToRadians(center.lng());
-    const lat2 = degreesToRadians(ne.lat());
-    const lon2 = degreesToRadians(ne.lng());
-
-    // distance = circle radius from center to Northeast corner of bounds
-    const dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-    //dis contains the radius shown on the map in miles
-    console.log(`${center.lat()},${center.lng()} => ${dis} miles`);
-    const request = new Request(`/events/location/${center.lat()}/${center.lng()}/${dis}`);
+    const sw = bounds.getSouthWest();
+    console.log(`${center.lat()},${center.lng()}`);
+    //Here we should do something like this:
+    //1. Query the cache
+    //2. Query the live data => live data goes in DB as well, so it has to be though server side as well...perhaps use a more representative ID, like a hash of the events data, so we prevent double insertion of same event?
+    //3. Let our data on map function handle the doubles
+    const requestURL = `/events/location/${center.lat()}/${center.lng()}/${sw.lat()}/${sw.lng()}/${ne.lat()}/${ne.lng()}`;
+    const request = new Request(requestURL);
     const bar = document.querySelector('#progressBar');
     bar.classList.add('mdc-linear-progress--indeterminate');
     fetch(request).then((response) => response.json()).then((data) => {
         bar.classList.remove('mdc-linear-progress--indeterminate');
         console.log(data);
-        data.forEach((element) => {
-            if (!markers.find(marker => marker.position.lat == element.position.lat && marker.position.lng == element.position.lng)) {
-                let marker = new google.maps.Marker({
-                    "position": element.position,
-                    "map": map,
-                });
-                marker.event_id = element.id;
-                marker.event_name = element.name;
-                marker.event_venue = element.venue_name;
-                marker.popup = new google.maps.InfoWindow({
-                    content: `${marker.event_name} @${marker.event_venue}`,
-                });
-                marker.addListener('mouseover', eventOver);
-                marker.addListener('mouseout', function () {
-                    this.popup.close();
-                });
-                marker.addListener('click', eventClick)
-                markers.push(marker);
-            }
-        });
+        putDataOnMap(data);
     });
 
+    const requestCached = new Request(requestURL + "/cached");
+    fetch(requestCached).then(response => response.json()).then(data => putDataOnMap(data));
 }
 
 

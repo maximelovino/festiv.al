@@ -104,7 +104,7 @@ exports.getSongForEvent = async (id, callback) => {
 	}
 	//pick a random artist from the lineup
 	const artist = event.lineup[Math.floor(Math.random() * event.lineup.length)];
-
+	//TODO perhaps call get song for all artists, filter the ones that don't have songs, and call random then, less null results in the end perhaps
 	artists.getArtistSong(artist, (song) => {
 		callback(song);
 	});
@@ -120,3 +120,16 @@ exports.getSingleEvent = async (id, callback) => {
 		callback(event);
 	}
 };
+
+exports.getEventsFromDB = async (swLat, swLng, neLat, neLng) => {
+	//add time condition
+	const data = await Event.find({
+		$and: [
+			{ 'position.lat': { $gte: swLat } },
+			{ 'position.lat': { $lte: neLat } },
+			{ 'position.lng': { $gte: swLng } },
+			{ 'position.lng': { $lte: neLng } },
+		],
+	});
+	return data;
+}

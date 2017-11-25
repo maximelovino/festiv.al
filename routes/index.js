@@ -1,6 +1,7 @@
 const artists = require('../controllers/artists');
 const events = require('../controllers/events');
 const express = require('express');
+const geo = require('../controllers/geo');
 const router = express.Router();
 
 /**
@@ -162,15 +163,19 @@ router.get('/artist/:name/song', (req, res) => {
 
 /**
  * 
- * @api {GET} /events/location/:lat/:lng/:radius Get a list of events around a given location
+ * @api {GET} /events/location/:centerlat/:centerlng/:swlat/:swlng/:nelat/:nelng/:cached? Get a list of events around a given location
  * @apiName GetEventsWithLocation
  * @apiGroup Events
  * @apiVersion  1.0.0
  * 
  * 
- * @apiParam  {Number} lat The latitude, in degrees
- * @apiParam  {Number} lng The longitude, in degrees
- * @apiParam  {Number} radius The radius to search, in miles
+ * @apiParam  {Number} centerlat The latitude of the map center, in degrees
+ * @apiParam  {Number} centerlng The longitude of the map center, in degrees
+ * @apiParam  {Number} swlat The latitude of the southwest point of the map, in degrees
+ * @apiParam  {Number} swlng The longitude of the southwest point of the map, in degrees
+ * @apiParam  {Number} nelat The latitude of the northeast point of the map, in degrees
+ * @apiParam  {Number} nelng The longitude of the northeast point of the map, in degrees
+ * @apiParam  {String} cached If set to "cached", cached data will be sent back, otherwise live data
  * 
  * @apiSuccess (200) {Object[]} events The list of events is sent as response
  * @apiSuccess (200) {String} events.name The name of the event
@@ -187,9 +192,13 @@ router.get('/artist/:name/song', (req, res) => {
  * 
  * @apiParamExample  {String} Request-Example:
     {
-        "lat": "46.510098934912456",
-        "lng": "6.635857986139854",
-        "radius": "52.80788302617289"
+        "centerlat": "46.510098934912456",
+        "centerlng": "6.635857986139854",
+        "swlat": "46.510098934912456",
+        "swlng": "6.635857986139854",
+        "nelat": "46.510098934912456",
+        "swlng": "6.635857986139854",
+        "cached": "cached",
     }
  * 
  * 
@@ -306,15 +315,28 @@ router.get('/artist/:name/song', (req, res) => {
  * 
  * 
  */
-router.get('/events/location/:lat/:lng/:radius', (req, res) => {
+router.get('/events/location/:centerlat/:centerlng/:swlat/:swlng/:nelat/:nelng/:cached?', (req, res) => {
     console.log("Events endpoint");
     console.log(req.params);
-    events.getEventsWithLocationAndRadius(req.params.lat, req.params.lng, req.params.radius, (data) => {
-        if (data)
-            res.json(data)
-        else
-            res.sendStatus(404);
-    });
+    if (req.params.cached && req.params.cached == "cached") {
+        console.log("CACHED ENDPOINT");
+        events.getEventsFromDB(req.params.swlat, req.params.swlng, req.params.nelat, req.params.nelng).then(data => {
+            if (data && data.length > 0) {
+                res.json(data);
+            } else {
+                res.sendStatus(404);
+            }
+        });
+    } else {
+        const rad = geo.getRadius(req.params.swlat, req.params.swlng, req.params.nelat, req.params.nelng);
+        console.log(`radius: ${rad}`);
+        events.getEventsWithLocationAndRadius(req.params.centerlat, req.params.centerlng, rad, (data) => {
+            if (data)
+                res.json(data)
+            else
+                res.sendStatus(404);
+        });
+    }
 });
 
 /**

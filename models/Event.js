@@ -28,7 +28,7 @@ const eventSchema = new mongoose.Schema({
 	created: {
 		type: Date,
 		default: Date.now,
-		expires: 7200,
+		expires: 24 * 3600,
 	},
 });
 

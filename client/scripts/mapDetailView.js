@@ -1,4 +1,5 @@
 let map;
+const baseURLDetail = "http://localhost:3000";
 function initDetailMap() {
 	map = new google.maps.Map(document.getElementById('detailMap'), {
 		zoom: 14,
@@ -16,11 +17,11 @@ function initDetailMap() {
 lineup.forEach(artist => {
 	console.log(artist);
 	const img = document.querySelector(`#${artist.split(" ").join("")}`);
-	const req = new Request(`/artist/${artist}/picture`);
+	const req = new Request(`${baseURLDetail}/artist/${artist}/picture`);
 	fetch(req)
-	.then(body => body.json())
-	.then(data => {
-		console.log(data);
-		img.src=data.picture;
-	});
+		.then(body => body.json())
+		.then(data => {
+			console.log(data);
+			img.src = data.picture;
+		});
 });

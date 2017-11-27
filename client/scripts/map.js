@@ -16,7 +16,7 @@ if (navigator.geolocation) {
 
 function eventOver() {
     this.popup.open(map, this);
-    const request = new Request(`events/${this.event_id}/song`);
+    const request = new Request(`${baseURL}/events/${this.event_id}/song`);
     const previewAudio = document.querySelector('#preview');
     fetch(request).then((response) => response.json()).then(data => {
         console.log(JSON.stringify(data));
@@ -40,7 +40,7 @@ function eventClick() {
 function putDataOnMap(data) {
     data.forEach((element) => {
         //this the duplicate marker check
-        if (!markers.find(marker => marker.position.lat == element.position.lat && marker.position.lng == element.position.lng)) {
+        if (!markers.find(marker => marker.event_id == element.id)) {
             let marker = new google.maps.Marker({
                 "position": element.position,
                 "map": map,
@@ -57,6 +57,8 @@ function putDataOnMap(data) {
             });
             marker.addListener('click', eventClick)
             markers.push(marker);
+        } else {
+            console.log("Marker already found");
         }
     });
 }

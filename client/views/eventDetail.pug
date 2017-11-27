@@ -10,7 +10,7 @@ block content
 	h2 #{event.venue_name}
 	#detailMap
 	h3 #{event.date}
-	p #{event.description}
+	p!=event.description
 	ul.mdc-list.mdc-list--avatar-list
 		each artist in event.lineup
 			li.mdc-list-item

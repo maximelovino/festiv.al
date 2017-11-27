@@ -161,9 +161,9 @@ router.get('/artist/:name/song', (req, res) => {
  * @apiSuccess (200) {Object[]} events The list of events is sent as response
  * @apiSuccess (200) {String} events.name The name of the event
  * @apiSuccess (200) {String} events.venue_name The name of the venue of the event
- * @apiSuccess (200) {Object} events.location The location of the event
- * @apiSuccess (200) {Number} events.location.lat The latitude of the event
- * @apiSuccess (200) {Number} events.location.lng The longitude of the event
+ * @apiSuccess (200) {Object} events.position The location of the event
+ * @apiSuccess (200) {Number} events.position.lat The latitude of the event
+ * @apiSuccess (200) {Number} events.position.lng The longitude of the event
  * @apiSuccess (200) {String[]} events.lineup The lineup of the event
  * @apiSuccess (200) {String} events.id The id of the event
  * @apiSuccess (200) {String} events.date The date of the event in format YYYY-MM-DD
@@ -361,7 +361,52 @@ router.get('/events/:id/song', (req, res) => {
     })
 });
 
-//TODO do the doc
+/**
+ * 
+ * @api {GET} /events/:id/details Get the details for an event
+ * @apiName GetEventDetails
+ * @apiGroup Events
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * @apiParam  {String} id The id of the event
+ * 
+ * @apiSuccess (200) {String} name The name of the event
+ * @apiSuccess (200) {String} venue_name The name of the venue of the event
+ * @apiSuccess (200) {Object} position The location of the event
+ * @apiSuccess (200) {Number} position.lat The latitude of the event
+ * @apiSuccess (200) {Number} position.lng The longitude of the event
+ * @apiSuccess (200) {String[]} lineup The lineup of the event
+ * @apiSuccess (200) {String} id The id of the event
+ * @apiSuccess (200) {String} date The date of the event in format YYYY-MM-DD
+ * @apiSuccess (200) {String} description The description of the event
+ * @apiSuccess (200) {String} ticketshop The link to the ticketshop
+ * 
+ * @apiParamExample  {String} Request-Example:
+    {
+        "id" : "6e200907ba596840d19e967f2c98822fd071a312fa5685d55fb8db93d68d6f24"
+    }
+ * 
+ * 
+ * @apiSuccessExample {Object} Success-Response:
+{
+    "name": "Sleep Party People (Bad Bonn)",
+    "venue_name": "Bad Bonn",
+    "position": {
+        "lat": 46.8615737,
+        "lng": 7.1801778
+    },
+    "lineup": [
+        "SLEEP PARTY PEOPLE"
+    ],
+    "id": "6e200907ba596840d19e967f2c98822fd071a312fa5685d55fb8db93d68d6f24",
+    "date": "2017-11-24",
+    "description": " Imagine all the dreams in the colour of Pop. <p> Ist es wirklich eine gute Idee, in der Jagdsaison mit einer Hasenmaske rumzulaufen? Den Dänen Brian Batz alias Sleep Party People kümmerts nicht. Sein Puls bleibt stets auf Yogi-Frequenz. Darum auch der Schlaf im Namen. Und gleich noch ein Dream vor den Pop. Nicht immer ungestört. Was Batz, wahlweise allein oder mit seinen Mit-Hasen, auf die Bühne bringt, lebt nicht nur von der Ruhe, sondern auch von der Dynamik. Bunt bewegte Träume sind garantiert. <p> Est-ce vraiment une bonne idée de se balader déguisé en lapin lors de la saison de chasse ? Le Danois Brian Batz \u0096 alias Sleep Party People \u0096 ne s\u0092en préoccupe gère. Il est toujours parfaitement zen. D\u0092où le sommeil dans son nom. Et un dream devant sa pop. Un calme tout de même quelquefois bousculé. Ce que Batz nous présente sur scène \u0096 avec ou sans ses co-lapins \u0096 est du calme marié à un dynamisme pur. Des rêves mouvementés et pleins de couleurs sont garantis ! <p> (Text: Ivo Stritt)<p> VORVERKAUF / PRÉLOCATION<br><a href=\"http://www.starticket.ch/0showlist.asp?Language=D&txtSearch=bad+bonn&suchen.x=0&suchen.y=0&fulltextHidden=1\" rel=\"nofollow\">www.starticket.ch</a></p></p></p></p>",
+    "ticketshop": "https://www.bandsintown.com/t/18775234?app_id=FestivDotAl&came_from=267"
+}
+ * 
+ * 
+ */
 router.get('/events/:id/details', (req, res) => {
     events.getSingleEvent(req.params.id, (data) => {
         if (data) {

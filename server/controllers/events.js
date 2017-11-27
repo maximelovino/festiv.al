@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const eventful = require('./eventful');
 const bit = require('./bandsintown');
-const uuid = require('uuid');
 const Event = mongoose.model('Event');
 const artists = require('./artists');
+const crypto = require('crypto');
 
 exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 	eventful.getEventsWithLocationAndRadius(lat, lng, radius, (data) => {
@@ -39,7 +39,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 					}
 				}
 
-				return {
+				const event = {
 					"name": d.title,
 					"venue_name": d.venue_name,
 					"position": {
@@ -47,15 +47,28 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 						"lng": parseFloat(d.longitude),
 					},
 					"lineup": lineup,
-					"id": uuid.v4(),
 					"date": date,
 					"description": d.description || "",
 					"ticketshop": ticketLink,
 				};
+				//we hash the event, it will be used as ID
+				event.id = crypto.createHash('sha256').update(JSON.stringify(event)).digest('hex');
+				return event;
 			});
 			callback(dataToSend);
+			console.log(`Found ${dataToSend.length} events`);
 			//DB insertion
-			Event.insertMany(dataToSend).then(console.log("inserted everything well")).catch(e => console.log(e));
+			//If we already have an event with the same hash, we remove it and insert it newly
+
+			dataToSend.forEach(entry => {
+				Event.findOne({ 'id': entry.id }).then(found => {
+					if (found) {
+						Event.findByIdAndUpdate(found._id, { 'created': Date.now() }).then().catch(e => console.log(e));
+					} else {
+						new Event(entry).save().then().catch(e => console.log(e));
+					}
+				});
+			});
 		});
 	});
 };

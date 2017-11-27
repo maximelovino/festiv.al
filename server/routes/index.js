@@ -5,25 +5,6 @@ const geo = require('../controllers/geo');
 const router = express.Router();
 
 /**
- * Pages routes
- */
-
-//Route to get the homepage of the site
-router.get('/', (req, res) => {
-    res.render('home');
-});
-
-//Route to get the details page of a specific event
-router.get('/events/:id/detail', (req, res) => {
-    events.getSingleEvent(req.params.id, (event) => {
-        if (event)
-            res.render('eventDetail', { event });
-        else
-            res.sendStatus(404);
-    })
-});
-
-/**
  * API Routes
  */
 
@@ -232,7 +213,7 @@ router.get('/artist/:name/song', (req, res) => {
             ],
             "id": "6327f6f3-5860-4810-84f3-bd49a1033427",
             "date": "2017-11-22",
-            "description": " <b>The Atomic Bitchwax</b><br> (US - Stoner rock)<br><br> À la base plus un side project, qu&#39;un véritable groupe en tant que tel, THE ATOMIC BITCHWAX a vu le jour au début des années 90 dans le New Jersey. À cette époque, Ed Mundell (Monster Magnet 1992 \u0096 2010), Chris Kosnik (ex Godspeed) et Keith Ackermann, décident de former un groupe dans le but de jammer durant leur temps libre. Il leur faudra presque 7 ans pour se décider à sortir leur premier album, durant l&#39;été 1999. Depuis, ils ont dévoilé en tout 2 EPs et 6 albums studio, dont le dernier intitulé &quot;Gravitron&quot;, sorti en avril 2015. Entre-temps, Finn Ryan (ex Core) a remplacé Ed Mundell en 2005 à la guitare et Bob Pantella (Monster Magnet) a pris la place de Keith Ackermann à la batterie en 2007. Seul Chris Kosnik, qui a d&#39;ailleurs rejoint Monster Magnet en 2013, subsiste depuis les débuts du groupe. Pour ceux qui s&#39;en souviennent, THE ATOMIC BITCHWAX était déjà de passage aux Caves du Manoir en 2014, dans le cadre du PALP Festival. À cette époque, ils nous présentaient notamment l&#39;album &quot;The Local Fuzz&quot;, sorti en 2011. Un incroyable disque composé d&#39;une seule chanson instrumentale de plus de 42 minutes. Vous l&#39;aurez deviné, ces gars-là connaissent leur sujet sur le bout des doigts. Du Stoner Rock comme on aime, largement influencé par le rock psychédélique des 60s et les gros riffs des 70s. Amateurs de Monster Magnet (bien évidemment) et de riffs (au sens noble du terme hein), ne ratez ce concert sous aucun prétexte. Vos esgourdes vous diront merci.<br><br><b>Mammoth Mammoth</b><br> (AS - Hard-rock, stoner rock)<br><br> Quand les Australiens de MAMMOTH MAMMOTH se déplacent en Europe, ce n&#39;est jamais pour faire dans la dentelle. Comme leur nom l\u0092indique, leur Hard Rock/Stoner ne fait ni dans la légèreté ni dans la subtilité. C&#39;est un peu comme débarquer au mariage de ta cousine à fond, dans une vieille caisse qui tient à peine la route, du Motörhead à coin dans la radio et ta plus belle veste à patch. Le tout, avec une canette à la main et une clope au coin du bec bien sûr. En gros, ce qui va passer est très simple : ils vont arriver sur scène, brancher leurs guitares, monter le son et faire tomber vos chagnottes les unes après les autres. On sait pas vous, mais nous, on se réjouit !",
+            "description": " <b>The Atomic Bitchwax</b><br> (US - Stoner rock)<br><br> À la base plus un side project, qu&#39;un véritable groupe en tant que tel, THE ATOMIC BITCHWAX a vu le jour au début des années 90 dans le New Jersey. À cette époque, Ed Mundell (Monster Magnet 1992 \u0096 2010), Chris Kosnik (ex Godspeed) et Keith Ackermann, décident de former un groupe dans le but de jammer durant leur temps libre. Il leur faudra presque 7 ans pour se décider à sortir leur premier album, durant l&#39;été 1999. Depuis, ils ont dévoilé en tout 2 EPs et 6 albums studio, dont le dernier intitulé &quot;Gravitron&quot;, sorti en avril 2015. Entre-temps, Finn Ryan (ex Core) a remplacé Ed Mundell en 2005 à la guitare et Bob Pantella (Monster Magnet) a pris la place de Keith Ackermann à la batterie en 2007. Seul Chris Kosnik, qui a d&#39;ailleurs rejoint Monster Magnet en 2013, subsiste depuis les débuts du groupe. Pour ceux qui s&#39;en souviennent, THE ATOMIC BITCHWAX était déjà de passage aux Caves du Manoir en 2014, dans le cadre du PALP Festival. À cette époque, ils nous présentaient notamment l&#39;album &quot;The Local Fuzz&quot;, sorti en 2011. Un incroyable disque composé d&#39;une seule chanson instrumentale de plus de 42 minutes. Vous l&#39;aurez deviné, ces gars-là connaissent leur sujet sur le bout des doigts. Du Stoner Rock comme on aime, largement influencé par le rock psychédélique des 60s et les gros riffs des 70s. Amateurs de Monster Magnet (bien évidemment) et de riffs (au sens noble du terme hein), ne ratez ce concert sous aucun prétexte. Vos esgourdes vous diront merci.<br><br><b>Mammoth Mammoth</b><br> (AS - Hard-rock, stoner rock)<br><br> Quand les Australiens de MAMMOTH MAMMOTH se déplacent en Europe, ce n&#39;est jamais pour faire dans la dentelle. Comme leur nom l\u0092indique, leur Hard Rock/Stoner ne fait ni dans la légèreté ni dans la subtilité. C&#39;est un peu comme débarquer au mariage de ta cousine à fond, dans une vieille caisse qui tient à peine la route, du Motörhead à coin dans la radio et ta plus belle veste à patch. Le tout, avec une canette à la main et une clope au coin du bec bien sûr. En gros, ce qui va passer est très simple : ils vont arriver sur scène, brancher leurs guitares, monter le son et faire tomber vos chagnottes les unes après les autres. On sait pas vous, mais nous, on se réjouit !",
             "ticketshop": ""
         },
         {
@@ -378,6 +359,18 @@ router.get('/events/:id/song', (req, res) => {
             res.sendStatus(404);
         }
     })
+});
+
+//TODO do the doc
+router.get('/events/:id/details', (req, res) => {
+    events.getSingleEvent(req.params.id, (data) => {
+        if (data) {
+            data.created = undefined; // we remove this field
+            res.json(data);
+        } else {
+            res.sendStatus(404);
+        }
+    });
 });
 
 module.exports = router;

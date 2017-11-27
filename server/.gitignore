@@ -1,0 +1,6 @@
+node_modules/
+.idea/
+*.env
+.vscode/
+doc/
+package-lock.json

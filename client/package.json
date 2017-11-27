@@ -1,11 +1,10 @@
 {
-  "name": "festiv.al",
+  "name": "festiv.al-client",
   "version": "1.0.0",
   "description": "An app to search music concerts and festivals around you",
   "main": "start.js",
   "scripts": {
     "start": "nodemon start.js",
-    "doc": "apidoc -i routes/ -o doc/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,15 +18,10 @@
   },
   "homepage": "https://github.com/maximelovino/festiv.al#readme",
   "dependencies": {
-    "base-64": "^0.1.0",
-    "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "material-components-web": "^0.24.0",
-    "mongoose": "^4.13.3",
-    "mysql": "^2.15.0",
     "nodemon": "^1.12.1",
     "pug": "^2.0.0-rc.4",
-    "request": "^2.83.0",
-    "uuid": "^3.1.0"
+    "request": "^2.83.0"
   }
 }

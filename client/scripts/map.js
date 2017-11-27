@@ -2,11 +2,32 @@ let map;
 let markers = [];
 const stopButton = document.querySelector('#stopButton');
 const baseURL = "http://localhost:3000";
+const previewAudio = document.querySelector('#preview');
+let isPaused = true;
 
 stopButton.addEventListener('click', () => {
-    const previewAudio = document.querySelector('#preview');
-    previewAudio.pause();
+    if (isPaused) {
+        startPlayer();
+    } else {
+        pausePlayer();
+    }
 });
+
+previewAudio.addEventListener('ended', pausePlayer);
+
+function pausePlayer() {
+    isPaused = true;
+    previewAudio.pause();
+    stopButton.innerHTML = "Play the music";
+}
+
+function startPlayer() {
+    isPaused = false;
+    previewAudio.load();
+    previewAudio.play();
+    stopButton.removeAttribute('disabled');
+    stopButton.innerHTML = "Stop the music";
+}
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -27,8 +48,7 @@ function eventOver() {
         songArtists.innerHTML = data.artists.join(", ");
         songCover.style.backgroundImage = `url(${data.cover_img})`;
         previewAudio.src = data.preview_link;
-        previewAudio.load();
-        previewAudio.play();
+        startPlayer();
     });
 }
 

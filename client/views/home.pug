@@ -16,7 +16,7 @@ block content
             h1.mdc-card__title.mdc-card__title--large#songTitle Nothing played yet
             h2.mdc-card__subtitle#songArtists
         section.mdc-card__actions
-            button.mdc-button.mdc-button--compact.mdc-card__action#stopButton Stop the music
+            button(disabled).mdc-button.mdc-button--compact.mdc-card__action#stopButton
     audio#preview(src="")
     script(src='/scripts/materialCalls.js')
     script(src='/scripts/map.js')

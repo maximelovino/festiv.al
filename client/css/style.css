@@ -14,10 +14,22 @@
     background-image: url("");
     background-size: cover;
     background-repeat: no-repeat;
-    height: 90px;
+    height: 150px;
+}
+
+.mdc-card__media__artist{
+    background-image: url("");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    height: 300px;
 }
 
 .nowPlayingCard{
     margin:24px;
     max-width: 21.875rem;
+}
+
+.artistEntry{
+    margin: 24px;
 }

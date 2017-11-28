@@ -1,8 +1,8 @@
 doctype html
-- const pageTitle = `Festiv.al`
+- const siteTitle = `Festiv.al`
 html
     head
-        title #{pageTitle}
+        title #{siteTitle}
         link(rel='stylesheet', href='/material/material-components-web.min.css')
         link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
         link(rel='stylesheet', href='/css/style.css')
@@ -13,7 +13,8 @@ html
         header.mdc-toolbar.mdc-toolbar--fixed
             div.mdc-toolbar__row
                 section.mdc-toolbar__section.mdc-toolbar__section--align-start
-                    span.mdc-toolbar__title #{pageTitle}
+                    a(href="/").material-icons.mdc-toolbar__menu-icon home
+                    span.mdc-toolbar__title #{siteTitle}
         div.mdc-toolbar-fixed-adjust
             br
             block content

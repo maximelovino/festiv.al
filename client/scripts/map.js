@@ -91,7 +91,7 @@ function mapMoved() {
     console.log(`${center.lat()},${center.lng()}`);
     //Here we should do something like this:
     //1. Query the cache
-    //2. Query the live data => live data goes in DB as well, so it has to be though server side as well...perhaps use a more representative ID, like a hash of the events data, so we prevent double insertion of same event?
+    //2. Query the live data
     //3. Let our data on map function handle the doubles
     const requestURL = `${baseURL}/events/location/${center.lat()}/${center.lng()}/${sw.lat()}/${sw.lng()}/${ne.lat()}/${ne.lng()}`;
     const request = new Request(requestURL);

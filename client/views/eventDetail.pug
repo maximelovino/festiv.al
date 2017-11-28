@@ -2,19 +2,22 @@ extends layout
 
 block content
 	- const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
-	- console.log(event);
 	script(type="text/javascript").
 		let eventLocation = !{JSON.stringify(event.position)};
 		let lineup = !{JSON.stringify(event.lineup)};
 	h1 #{event.name}
-	h2 #{event.venue_name}
+	h2 #{event.venue_name} on #{event.date}
 	#detailMap
-	h3 #{event.date}
-	p!=event.description
-	ul.mdc-list.mdc-list--avatar-list
-		each artist in event.lineup
-			li.mdc-list-item
-				img(src="", width=56, height=56 id=artist.split(" ").join("")).mdc-list-item__start-detailMap
-				|#{artist}
+	.mdc-layout-grid
+		.mdc-layout-grid__inner
+			if event.description.trim() != ""
+				.mdc-layout-grid__cell
+					p!=event.description
+			.mdc-layout-grid__cell
+					each artist in event.lineup
+						.mdc-card.artistEntry(data-artist=artist)
+							.mdc-card__media.mdc-card__media__artist(id=artist.split(" ").join(""))
+							.mdc-card__supporting-text #{artist}
+			.mdc-layout-grid__cell#artistDetail
 	script(src="/scripts/mapDetailView.js")
 	script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initDetailMap`)

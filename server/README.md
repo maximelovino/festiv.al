@@ -204,4 +204,4 @@ We're gonna group the informations coming from the events providers API by putti
 
 We insert into the database every event we send after a request, even if this event was already in the DB. The DB is only used to get back the details of the events if the user clicks on details.
 
-Every insertion has a TTL of 7200s, so it's removed from the DB after 2 hours.
+Every insertion has a TTL of 24h, so it's removed from the databse after that period. If a new request for the same event is made and the result is the same, the TTL is reset to 24h from that new request.

@@ -389,21 +389,21 @@ router.get('/events/:id/song', (req, res) => {
  * 
  * 
  * @apiSuccessExample {Object} Success-Response:
-{
-    "name": "Sleep Party People (Bad Bonn)",
-    "venue_name": "Bad Bonn",
-    "position": {
-        "lat": 46.8615737,
-        "lng": 7.1801778
-    },
-    "lineup": [
-        "SLEEP PARTY PEOPLE"
-    ],
-    "id": "6e200907ba596840d19e967f2c98822fd071a312fa5685d55fb8db93d68d6f24",
-    "date": "2017-11-24",
-    "description": " Imagine all the dreams in the colour of Pop. <p> Ist es wirklich eine gute Idee, in der Jagdsaison mit einer Hasenmaske rumzulaufen? Den Dänen Brian Batz alias Sleep Party People kümmerts nicht. Sein Puls bleibt stets auf Yogi-Frequenz. Darum auch der Schlaf im Namen. Und gleich noch ein Dream vor den Pop. Nicht immer ungestört. Was Batz, wahlweise allein oder mit seinen Mit-Hasen, auf die Bühne bringt, lebt nicht nur von der Ruhe, sondern auch von der Dynamik. Bunt bewegte Träume sind garantiert. <p> Est-ce vraiment une bonne idée de se balader déguisé en lapin lors de la saison de chasse ? Le Danois Brian Batz \u0096 alias Sleep Party People \u0096 ne s\u0092en préoccupe gère. Il est toujours parfaitement zen. D\u0092où le sommeil dans son nom. Et un dream devant sa pop. Un calme tout de même quelquefois bousculé. Ce que Batz nous présente sur scène \u0096 avec ou sans ses co-lapins \u0096 est du calme marié à un dynamisme pur. Des rêves mouvementés et pleins de couleurs sont garantis ! <p> (Text: Ivo Stritt)<p> VORVERKAUF / PRÉLOCATION<br><a href=\"http://www.starticket.ch/0showlist.asp?Language=D&txtSearch=bad+bonn&suchen.x=0&suchen.y=0&fulltextHidden=1\" rel=\"nofollow\">www.starticket.ch</a></p></p></p></p>",
-    "ticketshop": "https://www.bandsintown.com/t/18775234?app_id=FestivDotAl&came_from=267"
-}
+    {
+        "name": "Sleep Party People (Bad Bonn)",
+        "venue_name": "Bad Bonn",
+        "position": {
+            "lat": 46.8615737,
+            "lng": 7.1801778
+        },
+        "lineup": [
+            "SLEEP PARTY PEOPLE"
+        ],
+        "id": "6e200907ba596840d19e967f2c98822fd071a312fa5685d55fb8db93d68d6f24",
+        "date": "2017-11-24",
+        "description": " Imagine all the dreams in the colour of Pop. <p> Ist es wirklich eine gute Idee, in der Jagdsaison mit einer Hasenmaske rumzulaufen? Den Dänen Brian Batz alias Sleep Party People kümmerts nicht. Sein Puls bleibt stets auf Yogi-Frequenz. Darum auch der Schlaf im Namen. Und gleich noch ein Dream vor den Pop. Nicht immer ungestört. Was Batz, wahlweise allein oder mit seinen Mit-Hasen, auf die Bühne bringt, lebt nicht nur von der Ruhe, sondern auch von der Dynamik. Bunt bewegte Träume sind garantiert. <p> Est-ce vraiment une bonne idée de se balader déguisé en lapin lors de la saison de chasse ? Le Danois Brian Batz \u0096 alias Sleep Party People \u0096 ne s\u0092en préoccupe gère. Il est toujours parfaitement zen. D\u0092où le sommeil dans son nom. Et un dream devant sa pop. Un calme tout de même quelquefois bousculé. Ce que Batz nous présente sur scène \u0096 avec ou sans ses co-lapins \u0096 est du calme marié à un dynamisme pur. Des rêves mouvementés et pleins de couleurs sont garantis ! <p> (Text: Ivo Stritt)<p> VORVERKAUF / PRÉLOCATION<br><a href=\"http://www.starticket.ch/0showlist.asp?Language=D&txtSearch=bad+bonn&suchen.x=0&suchen.y=0&fulltextHidden=1\" rel=\"nofollow\">www.starticket.ch</a></p></p></p></p>",
+        "ticketshop": "https://www.bandsintown.com/t/18775234?app_id=FestivDotAl&came_from=267"
+    }
  * 
  * 
  */

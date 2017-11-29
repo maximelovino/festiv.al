@@ -2,6 +2,10 @@ extends layout
 
 block content
     - const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
+        .mdc-textfield.mdc-textfield--fullwidth
+            input(type="text" placeholder="Search location" aria-label="Search location").mdc-textfield__input#searchBar
+            .mdc-textfield__bottom-line
+        br
     div#map
     div(role="progressbar").mdc-linear-progress#progressBar
         .mdc-linear-progress__buffering-dots
@@ -18,8 +22,9 @@ block content
         section.mdc-card__actions
             button(disabled).mdc-button.mdc-button--compact.mdc-card__action#stopButton
     audio#preview(src="")
-    script(src='/scripts/materialCalls.js')
     script(src='/scripts/map.js')
-    script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initMap`)
+    script(src='/scripts/materialCalls.js')
+    script(src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initMap&libraries=places`)
+    script(src='/scripts/searchAutoComplete.js')
 
 

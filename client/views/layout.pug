@@ -5,6 +5,7 @@ html
         title #{siteTitle}
         link(rel='stylesheet', href='/material/material-components-web.min.css')
         link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        link(href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet")
         link(rel='stylesheet', href='/css/style.css')
         script(src='/material/material-components-web.min.js')
         script window.mdc.autoInit();
@@ -13,7 +14,7 @@ html
         header.mdc-toolbar.mdc-toolbar--fixed
             div.mdc-toolbar__row
                 section.mdc-toolbar__section.mdc-toolbar__section--align-start
-                    a(href="/").material-icons.mdc-toolbar__menu-icon home
+                    a(href="/").material-icons.mdc-toolbar__menu-icon.mdc-toolbar__title home
                     span.mdc-toolbar__title #{siteTitle}
         div.mdc-toolbar-fixed-adjust
             br

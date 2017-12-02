@@ -1,34 +1,7 @@
 let map;
 let markers = [];
-const stopButton = document.querySelector('#stopButton');
-const baseURL = "http://localhost:3000";
-const previewAudio = document.querySelector('#preview');
 let clusterer;
-let isPaused = true;
-
-stopButton.addEventListener('click', () => {
-    if (isPaused) {
-        startPlayer();
-    } else {
-        pausePlayer();
-    }
-});
-
-previewAudio.addEventListener('ended', pausePlayer);
-
-function pausePlayer() {
-    isPaused = true;
-    previewAudio.pause();
-    stopButton.innerHTML = "Play the music";
-}
-
-function startPlayer() {
-    isPaused = false;
-    previewAudio.load();
-    previewAudio.play();
-    stopButton.removeAttribute('disabled');
-    stopButton.innerHTML = "Stop the music";
-}
+let markerSpiderfier;
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -37,19 +10,14 @@ if (navigator.geolocation) {
 }
 
 function eventOver() {
+    console.warn(this);
     this.popup.open(map, this);
     const request = new Request(`${baseURL}/events/${this.event_id}/song`);
     const previewAudio = document.querySelector('#preview');
+    console.log(request);
     fetch(request).then((response) => response.json()).then(data => {
-        console.log(JSON.stringify(data));
-        const songTitle = document.querySelector('#songTitle');
-        const songArtists = document.querySelector('#songArtists');
-        const songCover = document.querySelector('#songCover');
-        songTitle.innerHTML = data.title;
-        songArtists.innerHTML = data.artists.join(", ");
-        songCover.style.backgroundImage = `url(${data.cover_img})`;
-        previewAudio.src = data.preview_link;
-        startPlayer();
+        console.log(data);
+        songFetched(data);
     });
 }
 
@@ -76,8 +44,9 @@ function putDataOnMap(data) {
             marker.addListener('mouseout', function () {
                 this.popup.close();
             });
-            marker.addListener('click', eventClick)
+            google.maps.event.addListener(marker, 'spider_click', eventClick);
             markers.push(marker);
+            markerSpiderfier.addMarker(marker);
             clusterer.addMarker(marker);
         } else {
             console.log("Marker already found");
@@ -115,6 +84,15 @@ function initMap() {
         zoom: 10,
         center: { lat: 46.20949, lng: 6.135212 }
     });
+
+    markerSpiderfier = new OverlappingMarkerSpiderfier(map, {
+        markersWontMove: true,
+        markersWontHide: true,
+        basicFormatEvents: true
+    });
+
+
     clusterer = new MarkerClusterer(map, markers, { imagePath: '/assets/markers/m' });
+    clusterer.setMaxZoom(15);
     map.addListener('idle', mapMoved);
 }

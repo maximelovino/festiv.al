@@ -43,8 +43,7 @@ exports.getArtistByName = (artistName, callback) => {
 			}
 		} else {
 			console.log("Problem getting events for artist from bandsInTown");
-			console.log(error);
-			console.log(response);
+			console.log(response.body);
 			callback(null);
 		}
 	})

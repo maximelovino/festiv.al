@@ -17,8 +17,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 				callback(null);
 		} else {
 			console.log("Problem getting events from Eventful");
-			console.log(error);
-			console.log(response);
+			console.log(response.body);
 			callback(null);
 		}
 	})

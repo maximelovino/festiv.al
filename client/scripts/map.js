@@ -3,6 +3,7 @@ let markers = [];
 const stopButton = document.querySelector('#stopButton');
 const baseURL = "http://localhost:3000";
 const previewAudio = document.querySelector('#preview');
+let clusterer;
 let isPaused = true;
 
 stopButton.addEventListener('click', () => {
@@ -63,7 +64,7 @@ function putDataOnMap(data) {
         if (!markers.find(marker => marker.event_id == element.id)) {
             let marker = new google.maps.Marker({
                 "position": element.position,
-                "map": map,
+                //"map": map,
             });
             marker.event_id = element.id;
             marker.event_name = element.name;
@@ -77,6 +78,7 @@ function putDataOnMap(data) {
             });
             marker.addListener('click', eventClick)
             markers.push(marker);
+            clusterer.addMarker(marker);
         } else {
             console.log("Marker already found");
         }
@@ -113,6 +115,6 @@ function initMap() {
         zoom: 10,
         center: { lat: 46.20949, lng: 6.135212 }
     });
-
+    clusterer = new MarkerClusterer(map, markers, { imagePath: '/assets/markers/m' });
     map.addListener('idle', mapMoved);
 }

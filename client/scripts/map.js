@@ -10,7 +10,6 @@ if (navigator.geolocation) {
 }
 
 function eventOver() {
-    console.warn(this);
     this.popup.open(map, this);
     const request = new Request(`${baseURL}/events/${this.event_id}/song`);
     const previewAudio = document.querySelector('#preview');
@@ -18,7 +17,7 @@ function eventOver() {
     fetch(request).then((response) => response.json()).then(data => {
         console.log(data);
         songFetched(data);
-    });
+    }).catch(e => console.warn(e));
 }
 
 
@@ -72,10 +71,10 @@ function mapMoved() {
         bar.classList.remove('mdc-linear-progress--indeterminate');
         console.log(data);
         putDataOnMap(data);
-    });
+    }).catch(e => console.warn(e));
 
     const requestCached = new Request(requestURL + "/cached");
-    fetch(requestCached).then(response => response.json()).then(data => putDataOnMap(data));
+    fetch(requestCached).then(response => response.json()).then(data => putDataOnMap(data)).catch(e => console.warn(e));
 }
 
 

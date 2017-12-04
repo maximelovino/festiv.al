@@ -4,6 +4,7 @@ const bit = require('./bandsintown');
 const Event = mongoose.model('Event');
 const artists = require('./artists');
 const crypto = require('crypto');
+const log = require('winston');
 
 exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 	eventful.getEventsWithLocationAndRadius(lat, lng, radius, (data) => {
@@ -56,16 +57,16 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 				return event;
 			});
 			callback(dataToSend);
-			console.log(`Found ${dataToSend.length} events`);
+			log.info(`Found ${dataToSend.length} events`);
 			//DB insertion
 			//If we already have an event with the same hash, we remove it and insert it newly
 
 			dataToSend.forEach(entry => {
 				Event.findOne({ 'id': entry.id }).then(found => {
 					if (found) {
-						Event.findByIdAndUpdate(found._id, { 'created': Date.now() }).then().catch(e => console.log(e));
+						Event.findByIdAndUpdate(found._id, { 'created': Date.now() }).then().catch(e => log.info(e));
 					} else {
-						new Event(entry).save().then().catch(e => console.log(e));
+						new Event(entry).save().then().catch(e => log.info(e));
 					}
 				});
 			});
@@ -127,7 +128,7 @@ exports.getSongForEvent = async (id, callback) => {
 exports.getSingleEvent = async (id, callback) => {
 	const event = await Event.findOne({ id });
 	if (!event) {
-		console.log("Event not found, returning null");
+		log.error("Event not found, returning null");
 		callback(null);
 	} else {
 		callback(event);
@@ -135,7 +136,7 @@ exports.getSingleEvent = async (id, callback) => {
 };
 
 exports.getEventsFromDB = async (swLat, swLng, neLat, neLng) => {
-	//add time condition
+	//TODO only get events in the future, not expiring ones
 	const data = await Event.find({
 		$and: [
 			{ 'position.lat': { $gte: swLat } },

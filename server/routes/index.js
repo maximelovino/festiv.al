@@ -2,6 +2,7 @@ const artists = require('../controllers/artists');
 const events = require('../controllers/events');
 const express = require('express');
 const geo = require('../controllers/geo');
+const log = require('winston');
 const router = express.Router();
 
 /**
@@ -133,7 +134,7 @@ router.get('/artist/:name/picture', (req, res) => {
  */
 router.get('/artist/:name/song', (req, res) => {
     const name = req.params.name;
-    console.log(name);
+    log.info(`Hit artist song with ${name}`);
     artists.getArtistSong(name, (data) => {
         if (data)
             res.json(data);
@@ -297,10 +298,10 @@ router.get('/artist/:name/song', (req, res) => {
  * 
  */
 router.get('/events/location/:centerlat/:centerlng/:swlat/:swlng/:nelat/:nelng/:cached?', (req, res) => {
-    console.log("Events endpoint");
-    console.log(req.params);
+    log.info("Events endpoint");
+    log.info(req.params);
     if (req.params.cached && req.params.cached == "cached") {
-        console.log("CACHED ENDPOINT");
+        log.info("CACHED ENDPOINT");
         events.getEventsFromDB(req.params.swlat, req.params.swlng, req.params.nelat, req.params.nelng).then(data => {
             if (data && data.length > 0) {
                 res.json(data);
@@ -310,7 +311,7 @@ router.get('/events/location/:centerlat/:centerlng/:swlat/:swlng/:nelat/:nelng/:
         });
     } else {
         const rad = geo.getRadius(req.params.swlat, req.params.swlng, req.params.nelat, req.params.nelng);
-        console.log(`radius: ${rad}`);
+        log.info(`radius: ${rad}`);
         events.getEventsWithLocationAndRadius(req.params.centerlat, req.params.centerlng, rad, (data) => {
             if (data)
                 res.json(data)

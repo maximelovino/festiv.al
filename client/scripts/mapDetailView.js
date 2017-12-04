@@ -53,7 +53,7 @@ artistEntries.forEach(entry => {
 		elevationClasses.forEach(cl => this.classList.add(cl));
 		fetch(req).then(body => body.json()).then(data => {
 			generateArtistDetailEntry(data);
-		});
+		}).catch(e => console.warn(e));
 	});
 });
 
@@ -81,5 +81,5 @@ lineup.forEach(artist => {
 		.then(data => {
 			console.log(data);
 			img.style.backgroundImage = `url(${data.picture})`;
-		});
+		}).catch(e => console.warn(e));
 });

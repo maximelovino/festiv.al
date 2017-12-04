@@ -1,5 +1,6 @@
 const APP_ID = "FestivDotAl";
-const request = require('request');
+const request = require('request-promise-native');
+const log = require('winston');
 
 exports.getSingleArtist = (artistName, callback) => {
 	const options = {
@@ -7,18 +8,14 @@ exports.getSingleArtist = (artistName, callback) => {
 		url: `https://rest.bandsintown.com/artists/${artistName}?app_id=${APP_ID}`,
 		headers: {
 			'Accept': "application/json",
-		}
+		},
+		json: true,
 	}
 
-	request(options, (error, response, body) => {
-		if (!error && response.statusCode == 200) {
-			const data = JSON.parse(body);
-			callback(data);
-		} else {
-			console.log("Problem getting artist from bandsInTown");
-			console.log(response.body);
-			callback(null);
-		}
+	request(options).then(data => callback(data)).catch(error => {
+		log.warn("Problem getting artist from bandsInTown");
+		callback(null);
+		log.warn(error)
 	});
 }
 
@@ -28,17 +25,12 @@ exports.getEventsForArtist = (artistName, callback) => {
 		url: `https://rest.bandsintown.com/artists/${artistName}/events?app_id=${APP_ID}`,
 		headers: {
 			'Accept': "application/json",
-		}
+		},
+		json: true,
 	}
-
-	request(options, (error, response, body) => {
-		if (!error && response.statusCode == 200) {
-			const data = JSON.parse(body);
-			callback(data);
-		} else {
-			console.log("Problem getting events for artist from bandsInTown");
-			console.log(response.body);
-			callback(null);
-		}
+	request(options).then(data => callback(data)).catch(error => {
+		log.warn("Problem getting events for artist from bandsInTown");
+		callback(null);
+		log.warn(error);
 	});
 }

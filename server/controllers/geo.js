@@ -1,18 +1,18 @@
-const EARTH_RADIUS_MILES = 3963.0;
+const EARTH_RADIUS_MILES = 3959.0;
 
 const degreesToRadians = (degreeValue) => {
-	return degreeValue * Math.PI / 180;
+	return degreeValue / 180 * Math.PI;
 }
 
 exports.getRadius = (swLat, swLng, neLat, neLng) => {
-	//${sw.lat()}/${sw.lng()}/${ne.lat()}/${ne.lng()}
-	// Convert lat and lng from decimal degrees into radians
-	const lat1 = degreesToRadians(swLat);
-	const lon1 = degreesToRadians(swLng);
-	const lat2 = degreesToRadians(neLat);
-	const lon2 = degreesToRadians(neLng);
+	const deltaLatRad = degreesToRadians(swLat - neLat);
+	const deltaLonRad = degreesToRadians(swLng - neLng);
+	const neLatRad = degreesToRadians(neLat);
+	const neLngRad = degreesToRadians(neLng);
+	const swLatRad = degreesToRadians(swLat);
+	const swLngRad = degreesToRadians(swLng);
 
-	// distance = circle radius from center to Northeast corner of bounds
-	const diameter = EARTH_RADIUS_MILES * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-	return diameter / 2;
+	let a = Math.sin(deltaLatRad / 2) * Math.sin(deltaLatRad / 2) + Math.cos(neLatRad) * Math.cos(swLatRad) * Math.sin(deltaLonRad / 2) * Math.sin(deltaLonRad / 2);
+	let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	return EARTH_RADIUS_MILES * c / 2;
 }

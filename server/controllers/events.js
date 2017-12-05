@@ -76,7 +76,7 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 
 function matchEventsFromEventfulWithBandsInTown(eventfulData, callback) {
 	let fullDataArray = [];
-	//TODO use promises in these functions so we can wait with Promise.all
+
 	eventfulData.forEach(event => {
 		matchOneEvent(event, (data) => {
 			fullDataArray.push(data);
@@ -100,7 +100,7 @@ function matchOneEvent(event, callback) {
 	}
 	bit.getEventsForArtist(performerName, (bitData) => {
 		if (bitData && bitData.length !== 0) {
-			//TODO we should match on date as well as venue
+
 			const bitEvent = bitData.find(e => e.venue.name.toLowerCase() == event.venue_name.toLowerCase());
 			if (bitEvent) {
 				event.bitData = bitEvent
@@ -118,7 +118,6 @@ exports.getSongForEvent = async (id, callback) => {
 	}
 	//pick a random artist from the lineup
 	const artist = event.lineup[Math.floor(Math.random() * event.lineup.length)];
-	//TODO perhaps call get song for all artists, filter the ones that don't have songs, and call random then, less null results in the end perhaps
 	artists.getArtistSong(artist, (song) => {
 		callback(song);
 	});
@@ -136,7 +135,6 @@ exports.getSingleEvent = async (id, callback) => {
 };
 
 exports.getEventsFromDB = async (swLat, swLng, neLat, neLng) => {
-	//TODO only get events in the future, not expiring ones
 	const data = await Event.find({
 		$and: [
 			{ 'position.lat': { $gte: swLat } },

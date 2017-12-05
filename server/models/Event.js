@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-//TODO convert dates to another format
 const eventSchema = new mongoose.Schema({
 	name: {
 		type: String,

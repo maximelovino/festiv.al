@@ -14,10 +14,11 @@ block content
 				.mdc-layout-grid__cell
 					p!=event.description
 			.mdc-layout-grid__cell
-					each artist in event.lineup
-						.mdc-card.artistEntry(data-artist=artist)
-							.mdc-card__media.mdc-card__media__artist(id=artist.split(" ").join(""))
-							.mdc-card__supporting-text #{artist}
+				h2 Lineup
+				each artist in event.lineup
+					.mdc-card.artistEntry(data-artist=artist)
+						.mdc-card__media.mdc-card__media__artist(id=artist.split(" ").join(""))
+						.mdc-card__supporting-text #{artist}
 			.mdc-layout-grid__cell#artistDetail
 	script(src="/scripts/mapDetailView.js")
 	script(async defer src=`https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&callback=initDetailMap`)

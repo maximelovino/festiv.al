@@ -11,9 +11,10 @@ exports.getEventsWithLocationAndRadius = (lat, lng, radius, callback) => {
 	}
 
 	request(options).then(data => {
-		if (data.events && data.events.event) {
+		if (data && data.events && data.events.event) {
 			callback(data.events.event)
 		} else {
+			log.warn(`Problem getting events for request ${options.url}`);
 			callback(null);
 		}
 	}).catch(error => {

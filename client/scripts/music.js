@@ -1,5 +1,4 @@
 const stopButton = document.querySelector('#stopButton');
-const baseURL = "http://localhost:3000";
 const previewAudio = document.querySelector('#preview');
 let isPaused = true;
 

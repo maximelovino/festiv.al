@@ -2,6 +2,8 @@ let map;
 let markers = [];
 let clusterer;
 let markerSpiderfier;
+const defaultPosition = { lat: 46.20949, lng: 6.135212 };
+const initialZoom = 10;
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -31,7 +33,6 @@ function putDataOnMap(data) {
         if (!markers.find(marker => marker.event_id == element.id)) {
             let marker = new google.maps.Marker({
                 "position": element.position,
-                //"map": map,
             });
             marker.event_id = element.id;
             marker.event_name = element.name;
@@ -44,11 +45,13 @@ function putDataOnMap(data) {
                 this.popup.close();
             });
             google.maps.event.addListener(marker, 'spider_click', eventClick);
+            //So a marker is in 3 places:
+            //1. In our array of markers
+            //2. In the marker spiderfier
+            //3. In the clusterer (that's how it's shown in the map)
             markers.push(marker);
             markerSpiderfier.addMarker(marker);
             clusterer.addMarker(marker);
-        } else {
-            console.log("Marker already found");
         }
     });
 }
@@ -80,8 +83,8 @@ function mapMoved() {
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: { lat: 46.20949, lng: 6.135212 }
+        zoom: initialZoom,
+        center: defaultPosition,
     });
 
     markerSpiderfier = new OverlappingMarkerSpiderfier(map, {

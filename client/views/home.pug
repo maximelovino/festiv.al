@@ -2,10 +2,10 @@ extends layout
 
 block content
     - const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
-        .mdc-textfield.mdc-textfield--fullwidth
-            input(type="text" placeholder="Search location" aria-label="Search location").mdc-textfield__input#searchBar
-            .mdc-textfield__bottom-line
-        br
+    .mdc-textfield.mdc-textfield--fullwidth
+        input(type="text" placeholder="Search location" aria-label="Search location").mdc-textfield__input#searchBar
+        .mdc-textfield__bottom-line
+    br
     div#map
     div(role="progressbar").mdc-linear-progress#progressBar
         .mdc-linear-progress__buffering-dots

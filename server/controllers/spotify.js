@@ -57,7 +57,7 @@ function getArtist(artistName, callback) {
             tokenRefreshed = false;
             callback(artist);
         }).catch(() => {
-            log.error("PROBLEM in getting artist info");
+            log.warn("PROBLEM in getting artist info");
             if (!tokenRefreshed)
                 generateToken(() => getArtist(artistName, callback))
             else

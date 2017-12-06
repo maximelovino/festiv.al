@@ -3,6 +3,7 @@ extends layout
 block content
 	- const MAPS_KEY="AIzaSyBCnNOlG3tmJcQJ7SCD_1Sl9f3Gy3OHlQY";
 	script(type="text/javascript").
+		let event = !{JSON.stringify(event)};
 		let eventLocation = !{JSON.stringify(event.position)};
 		let lineup = !{JSON.stringify(event.lineup)};
 	h1 #{event.name}

@@ -115,6 +115,7 @@ artistEntries.forEach(entry => {
 
 
 function initDetailMap() {
+	console.log(event);
 	map = new google.maps.Map(document.getElementById('detailMap'), {
 		zoom: 14,
 		center: eventLocation,

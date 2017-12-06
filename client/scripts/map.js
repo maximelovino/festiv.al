@@ -4,6 +4,7 @@ let clusterer;
 let markerSpiderfier;
 const defaultPosition = { lat: 46.20949, lng: 6.135212 };
 const initialZoom = 10;
+let runningRequests = 0;
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -68,10 +69,13 @@ function mapMoved() {
     //3. Let our data on map function handle the doubles
     const requestURL = `${baseURL}/events/location/${center.lat()}/${center.lng()}/${sw.lat()}/${sw.lng()}/${ne.lat()}/${ne.lng()}`;
     const request = new Request(requestURL);
+    runningRequests++;
     const bar = document.querySelector('#progressBar');
     bar.classList.add('mdc-linear-progress--indeterminate');
     fetch(request).then((response) => response.json()).then((data) => {
-        bar.classList.remove('mdc-linear-progress--indeterminate');
+        runningRequests--;
+        if (runningRequests == 0)
+            bar.classList.remove('mdc-linear-progress--indeterminate');
         console.log(data);
         putDataOnMap(data);
     }).catch(e => console.warn(e));

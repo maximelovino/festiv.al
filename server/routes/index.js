@@ -25,7 +25,8 @@ const router = express.Router();
  * @apiSuccess (200) {String[]} genres The genres of the artist's music
  * @apiSuccess (200) {String} description A small description of the artist
  * @apiSuccess (200) {Number} followers The number of Spotify followers of the artist
- * @apiSuccess (200) {String} Facebook The facebook page link of the artist
+ * @apiSuccess (200) {String} Spotify The Spotify page link of the artist
+ * @apiSuccess (200) {String} Facebook The Facebook page link of the artist
  * 
  * @apiParamExample  {String} Request-Example:
     {
@@ -51,6 +52,7 @@ const router = express.Router();
         ],
         "description": "UK rock band",
         "followers": 3116943,
+        "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI",
         "facebook": "http://www.facebook.com/muse"
     }
  * 

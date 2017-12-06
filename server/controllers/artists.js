@@ -17,6 +17,7 @@ exports.getSingleArtistInfos = (artistName, callback) => {
 					'genres': spotifyData.genres,
 					'description': brainz.disambiguation,
 					'followers': spotifyData.followers.total,
+					'spotify': spotifyData.external_urls.spotify,
 					'facebook': bitData.facebook_page_url,
 				}
 				callback(artist);

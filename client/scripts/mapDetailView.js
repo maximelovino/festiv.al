@@ -81,7 +81,11 @@ function generateArtistDetailEntry(artist) {
 		}
 
 		if (artist.followers) {
-			socialList.appendChild(createGridListEntry(`${artist.followers} Followers`, '/assets/spotify.png'));
+			const spotLink = document.createElement('a');
+			spotLink.setAttribute('href', artist.spotify);
+			const spotEntry = createGridListEntry(`${artist.followers} Followers`, '/assets/spotify.png');
+			spotLink.appendChild(spotEntry);
+			socialList.appendChild(spotLink);
 		}
 
 
@@ -100,7 +104,12 @@ artistEntries.forEach(entry => {
 		elevationClasses.forEach(cl => this.classList.add(cl));
 		fetch(req).then(body => body.json()).then(data => {
 			generateArtistDetailEntry(data);
-		}).catch(e => console.warn(e));
+		}).catch(e => {
+			console.warn(e);
+			const noData = document.createElement('p');
+			noData.innerHTML = "No data for this artist";
+			artistDetail.appendChild(noData);
+		});
 	});
 });
 
@@ -127,6 +136,13 @@ lineup.forEach(artist => {
 		.then(body => body.json())
 		.then(data => {
 			console.log(data);
-			img.style.backgroundImage = `url(${data.picture || "/assets/default-artist.png"})`;
-		}).catch(e => console.warn(e));
+			if (data) {
+				img.style.backgroundImage = `url(${data.picture || "/assets/default-artist.png"})`;
+			} else {
+				img.style.backgroundImage = `url(/assets/default-artist.png)`;
+			}
+		}).catch(e => {
+			console.warn(e);
+			img.style.backgroundImage = `url(/assets/default-artist.png)`;
+		});
 });

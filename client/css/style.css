@@ -25,6 +25,11 @@
     height: 300px;
 }
 
+.ticketlink{
+    text-decoration: none;
+    color: black;
+}
+
 .nowPlayingCard{
     margin:24px;
     max-width: 21.875rem;

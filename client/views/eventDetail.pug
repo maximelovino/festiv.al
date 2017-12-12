@@ -6,7 +6,10 @@ block content
 		let event = !{JSON.stringify(event)};
 		let eventLocation = !{JSON.stringify(event.position)};
 		let lineup = !{JSON.stringify(event.lineup)};
-	h1 #{event.name}
+	if (event.ticketshop != "")
+		h1 #{event.name} #[a(href=event.ticketshop).material-icons.ticketlink add_shopping_cart]
+	else
+		h1 #{event.name}
 	h2 #{event.venue_name} on #{event.date}
 	#detailMap
 	.mdc-layout-grid
